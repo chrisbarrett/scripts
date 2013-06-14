@@ -2,15 +2,21 @@
 #
 # ceval
 #
-# Chris Barrett <chris.d.barrett@me.com>
-# Copyright (c) 2013, distributed under BSD license.
+#
+# AUTHOR:  Chris Barrett <chris.d.barrett@me.com>
+# LICENSE: BSD
+#
+# Copyright (c) 2013
+#
 #
 # DESCRIPTION:
 #
-#   Evaluate C expressions. Generates a main function to contain the given
-#   expressions, then compiles and runs the resultant binary.
+#   Evaluate C expressions at the command-line. Generates a main function
+#   to contain the given expressions, then compiles and runs the resultant
+#   binary.
 #
 # USAGE:
+#
 #   ceval [expressions]
 #
 
