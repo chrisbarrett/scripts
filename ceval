@@ -95,7 +95,7 @@ if __FILE__ == $PROGRAM_NAME
   src = string_to_src(ARGV.join ' ')
   binary = mk_tmp_file
   clang_compile src, binary
-  abort 'Evaluation failed.'.red unless binary
+  abort 'Evaluation failed.'.red unless File.exists? binary
   system(binary)
   puts
 
