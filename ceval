@@ -27,10 +27,11 @@ require 'english'
 # Headers to include in the generated file.
 C_HEADERS = ['stdio.h', 'stdlib.h', 'assert.h', 'math.h', 'string.h']
 
-# Map standard error codes to their name and a description.
-# See 'sysexits.h' for the definition on your system.
+# Map error codes to their name and a description.
+# See 'sysexits.h' for standard definitions.
 C_ERRORS = {
   1  => ['ERROR', 'invalid operation'],
+  6  => ['ASSERT', 'assertion failure'],
   64 => ['EX_USAGE', 'command line usage error'],
   65 => ['EX_DATAERR', 'data format error'],
   66 => ['EX_NOINPUT', 'cannot open input'],
@@ -102,7 +103,7 @@ if __FILE__ == $PROGRAM_NAME
   # Show error information if evaluation returned non-zero.
   code = $CHILD_STATUS.to_i
   exit if code == 0
-  err, desc = C_ERRORS[code] || ['UNKNOWN', 'Unknown error']
+  err, desc = C_ERRORS[code] || ['UNKNOWN', 'unknown error']
   puts "! #{err} (#{code}) - #{desc}".red
   exit code
 end
