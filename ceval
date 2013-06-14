@@ -1,0 +1,94 @@
+#!/usr/bin/env ruby
+#
+# ceval
+#
+# Chris Barrett <chris.d.barrett@me.com>
+# Copyright (c) 2013, distributed under BSD license.
+#
+# DESCRIPTION:
+#
+#   Evaluate C expressions. Generates a main function to contain the given
+#   expressions, then compiles and runs the resultant binary.
+#
+# USAGE:
+#   ceval [expressions]
+#
+
+require 'colorize'
+require 'pathname'
+require 'english'
+
+# Headers to include in the generated file.
+C_HEADERS = ['stdio.h', 'stdlib.h', 'assert.h', 'math.h', 'string.h']
+
+# Map standard error codes to their name and a description.
+# See 'sysexits.h' for the definition on your system.
+C_ERRORS = {
+  1  => ['ERROR', 'invalid operation'],
+  64 => ['EX_USAGE', 'command line usage error'],
+  65 => ['EX_DATAERR', 'data format error'],
+  66 => ['EX_NOINPUT', 'cannot open input'],
+  67 => ['EX_NOUSER', 'addressee unknown'],
+  68 => ['EX_NOHOST', 'host name unknown'],
+  69 => ['EX_UNAVAILABLE', 'service unavailable'],
+  70 => ['EX_SOFTWARE', 'internal software error'],
+  71 => ['EX_OSERR', 'system error (e.g., cannot fork)'],
+  72 => ['EX_OSFILE', 'critical OS file missing'],
+  73 => ['EX_CANTCREAT', 'cannot create (user) output file'],
+  74 => ['EX_IOERR', 'input/output error'],
+  75 => ['EX_TEMPFAIL', 'temp failure; user is invited to retry'],
+  76 => ['EX_PROTOCOL', 'remote error in protocol'],
+  77 => ['EX_NOPERM', 'permission denied'],
+  78 => ['EX_CONFIG', 'configuration error']
+}
+
+# Create a C source file, using STR as the body expressions in MAIN.
+def string_to_src(str)
+  headers = C_HEADERS.map { |s| "#include <#{s}>\n" }.join
+  "#{headers} int main(){ #{str}; }"
+end
+
+# Create a temporary file.
+def mk_tmp_file
+  tmp = (ENV['TMPDIR'] || '/tmp/').strip
+  `mktemp #{tmp}ceval.XXXX`.strip
+end
+
+# Compile a string as a C program with clang.
+def clang_compile(src)
+  outfile = mk_tmp_file
+  cc = (ENV['CC'] || `which clang` || `which gcc` || `which cc`).strip
+  # Perform compilation
+  IO.popen([cc, '-xc', '-o', outfile, '-'], 'r+') do |h|
+    h.puts src
+    h.close_write
+  end
+  if $CHILD_STATUS.success?
+    `chmod +x #{outfile}`
+    outfile
+  end
+end
+
+if __FILE__ == $PROGRAM_NAME
+  puts 'Warning: empty input'.yellow if ARGV.empty?
+  src = string_to_src(ARGV.join ' ')
+
+  puts '---> Compiling...'.blue
+  binary = clang_compile src
+  abort 'Evaluation failed.'.red unless binary
+
+  puts '---> Executing...'.blue
+  system(binary)
+  puts
+
+  # Show error information if evalutation returned non-zero.
+  code = $CHILD_STATUS.to_i
+  exit if code == 0
+  err, desc = C_ERRORS[code] || ['UNKNOWN', 'Unknown error']
+  puts "! #{err} (#{code}) - #{desc}".red
+  exit code
+end
+
+# Local Variables:
+# mode: ruby
+# End:
