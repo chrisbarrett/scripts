@@ -6,7 +6,7 @@
 # AUTHOR:  Chris Barrett <chris.d.barrett@me.com>
 # LICENSE: BSD
 #
-# Copyright (c) 2013
+# Copyright (C) 2013, Chris Barrett
 #
 #
 # DESCRIPTION:
@@ -48,6 +48,21 @@ C_ERRORS = {
   78 => ['EX_CONFIG', 'configuration error']
 }
 
+
+def print_usage
+  puts <<-EOF
+ceval: Evaluate C expressions at the command-line.
+
+Usage:
+  ceval [expressions...]   Evaluate the given C expressions.
+
+Notes:
+  * Special characters must be double-escaped when entering
+    expressions at the shell.
+
+EOF
+end
+
 # Create a C source file, using STR as the body expressions in MAIN.
 def string_to_src(str)
   headers = C_HEADERS.map { |s| "#include <#{s}>\n" }.join
@@ -76,7 +91,10 @@ def clang_compile(src)
 end
 
 if __FILE__ == $PROGRAM_NAME
-  puts 'Warning: empty input'.yellow if ARGV.empty?
+  if ARGV.empty?
+    print_usage
+    exit 1
+  end
   src = string_to_src(ARGV.join ' ')
 
   puts '---> Compiling...'.blue
