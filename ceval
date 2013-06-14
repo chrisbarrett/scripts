@@ -76,18 +76,14 @@ def mk_tmp_file
 end
 
 # Compile a string as a C program with clang.
-def clang_compile(src)
-  outfile = mk_tmp_file
+def clang_compile(src, dest)
   cc = (ENV['CC'] || `which clang` || `which gcc` || `which cc`).strip
   # Perform compilation
-  IO.popen([cc, '-xc', '-o', outfile, '-'], 'r+') do |h|
+  IO.popen([cc, '-xc', '-o', dest, '-'], 'r+') do |h|
     h.puts src
     h.close_write
   end
-  if $CHILD_STATUS.success?
-    `chmod +x #{outfile}`
-    outfile
-  end
+  `chmod +x #{dest}` if $CHILD_STATUS.success?
 end
 
 if __FILE__ == $PROGRAM_NAME
@@ -95,17 +91,15 @@ if __FILE__ == $PROGRAM_NAME
     print_usage
     exit 1
   end
+
   src = string_to_src(ARGV.join ' ')
-
-  puts '---> Compiling...'.blue
-  binary = clang_compile src
+  binary = mk_tmp_file
+  clang_compile src, binary
   abort 'Evaluation failed.'.red unless binary
-
-  puts '---> Executing...'.blue
   system(binary)
   puts
 
-  # Show error information if evalutation returned non-zero.
+  # Show error information if evaluation returned non-zero.
   code = $CHILD_STATUS.to_i
   exit if code == 0
   err, desc = C_ERRORS[code] || ['UNKNOWN', 'Unknown error']
