@@ -49,7 +49,6 @@ C_ERRORS = {
   78 => ['EX_CONFIG', 'configuration error']
 }
 
-
 def print_usage
   puts <<-EOF
 ceval: Evaluate C expressions at the command-line.
@@ -88,10 +87,7 @@ def clang_compile(src, dest)
 end
 
 if __FILE__ == $PROGRAM_NAME
-  if ARGV.empty?
-    print_usage
-    exit 1
-  end
+  print_usage and exit 1 if ARGV.empty?
 
   src = string_to_src(ARGV.join ' ')
   binary = mk_tmp_file
