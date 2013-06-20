@@ -22,7 +22,7 @@ import           Data.Char                    (toLower)
 import           Prelude                      hiding (catch)
 import           System.Directory
 import           System.Environment           (getArgs)
-import           System.Exit                  (exitFailure, exitSuccess)
+import           System.Exit                  (exitFailure)
 import           System.FilePath.Posix
 import           Text.PrettyPrint.ANSI.Leijen hiding ((</>))
 
@@ -70,7 +70,7 @@ execute (Add args) = do
   where
     pathsFromArgs =
       forM args $ \path ->
-      (canonicalizePath path) `catch` (\(_::IOException) -> return path)
+        canonicalizePath path `catch` (\(_::IOException) -> return path)
 
     warnWhereNotExists paths = do
       notExists <- filterM (liftM not . fileOrDirectoryExists) paths
@@ -83,7 +83,7 @@ execute (Add args) = do
             (filterM fileOrDirectoryExists paths >>= mapM getFilesInTree)
 
     isMedia file =
-      takeExtension file `elem` [".m4a", ".mov", ".mp4"]
+      takeExtension file `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".aac", ".aiff"]
 
     promptDeleteOriginals files = do
       let n = length files
