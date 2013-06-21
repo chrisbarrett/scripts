@@ -46,19 +46,11 @@ showUsage =
   , "  add [items...]   Add files or folders to the iTunes library"
   , "  help             Show usage" ]
 
-
 execute :: Args -> IO ()
-
-execute Invalid =
-  putStrLn "Invalid usage." >> showUsage >> exitFailure
-
-execute (Unknown cmd) =
-  putStrLn ("Unrecognised command: " ++ cmd) >> execute Help >> exitFailure
-
-execute Help =
-  putStrLn "itunes: Commands for working with iTunes" >> showUsage
-
-execute (Add args) = do
+execute Help          = putStrLn "itunes: Commands for working with iTunes" >> showUsage
+execute Invalid       = putStrLn "Invalid usage." >> showUsage >> exitFailure
+execute (Unknown cmd) = putStrLn ("Unrecognised command: " ++ cmd) >> showUsage >> exitFailure
+execute (Add args)    = do
   itunesExists <- itunesMedia >>= doesDirectoryExist
   unless itunesExists $ putStrLn "Cannot find iTunes Media folder" >> exitFailure
   paths <- pathsFromArgs
