@@ -16,6 +16,7 @@
 -}
 
 {-# LANGUAGE ScopedTypeVariables #-}
+import           Control.Applicative
 import           Control.Exception
 import           Control.Monad
 import           Data.Char                    (toLower)
@@ -24,7 +25,8 @@ import           System.Directory
 import           System.Environment           (getArgs)
 import           System.Exit                  (exitFailure)
 import           System.FilePath.Posix
-import           Text.PrettyPrint.ANSI.Leijen hiding ((</>))
+import           Text.PrettyPrint.ANSI.Leijen (dullyellow, green, linebreak,
+                                               putDoc, red, text, (<+>), (<>))
 
 data Args = Add [FilePath] | Help | Invalid | Unknown String
           deriving Show
@@ -54,8 +56,7 @@ execute (Unknown cmd) =
   putStrLn ("Unrecognised command: " ++ cmd) >> execute Help >> exitFailure
 
 execute Help =
-  putStrLn description >> showUsage
-  where description = "itunes: Commands for working with iTunes"
+  putStrLn "itunes: Commands for working with iTunes" >> showUsage
 
 execute (Add args) = do
   itunesExists <- itunesMedia >>= doesDirectoryExist
@@ -79,8 +80,8 @@ execute (Add args) = do
         mapM_ (\x -> putDoc $ dullyellow (text "  ? ") <+> text x <> linebreak) notExists
 
     mediaFromPaths paths =
-      liftM (filter isMedia . concat)
-            (filterM fileOrDirectoryExists paths >>= mapM getFilesInTree)
+      filter isMedia . concat <$>
+      (filterM fileOrDirectoryExists paths >>= mapM getFilesInTree)
 
     isMedia file =
       takeExtension file `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".aac", ".aiff"]
@@ -96,16 +97,15 @@ execute (Add args) = do
 
         putStrLn $ "Deleted " ++ show n ++ " " ++ pluralize "item" n ++"."
 
+(<//>) :: IO FilePath -> FilePath -> IO FilePath
+io <//> p = (</>) <$> io <*> pure p
 
-itunesMedia :: IO String
-itunesMedia = do
-  home <- getHomeDirectory
-  return $ home </> "Music" </> "iTunes" </> "iTunes Media"
+itunesMedia :: IO FilePath
+itunesMedia = getHomeDirectory <//> ("Music" </> "iTunes" </> "iTunes Media")
 
 addToItunes :: FilePath -> IO ()
 addToItunes file = do
-  media <- itunesMedia
-  let dest = media </> "Automatically Add to iTunes.localized" </> takeFileName file
+  dest <- itunesMedia <//> ("Automatically Add to iTunes.localized" </> takeFileName file)
   copyFile file dest
   putDoc $ green (text "  A ") <+> text (takeFileName file) <> linebreak
 
@@ -114,14 +114,11 @@ getFilesInTree d | takeFileName d `elem` [".", ".."] = return []
 getFilesInTree d = do
   isDir <- doesDirectoryExist d
   if isDir
-    then liftM concat $ getDirectoryContents d >>= mapM (getFilesInTree . (</>) d)
+    then concat <$> (getDirectoryContents d >>= mapM (getFilesInTree . (</>) d))
     else return [d]
 
 fileOrDirectoryExists :: FilePath -> IO Bool
-fileOrDirectoryExists x = do
-  d <- doesDirectoryExist x
-  f <- doesFileExist x
-  return $ f || d
+fileOrDirectoryExists x = or <$> sequence [doesDirectoryExist x, doesFileExist x]
 
 type Count = Int
 pluralize :: String -> Count -> String
