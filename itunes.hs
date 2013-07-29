@@ -75,29 +75,30 @@ execute (Add args)    = do
       filter isMedia . concat <$>
       (filterM fileOrDirectoryExists paths >>= mapM getFilesInTree)
 
-    isMedia file =
-      takeExtension file `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".aac", ".aiff"]
+    isMedia file = takeExtension file `elem`
+                   [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
 
     promptDeleteOriginals files = do
       let n = length files
-      putStrLn $ "Delete original " ++ pluralize "item" n ++ "? (y/n) [n] "
+      putStrLn $ "Delete original " ++ pluralize n "item" ++ "? (y/n) [n] "
       shouldDelete <- getYesOrNo False
       when shouldDelete $ do
         forM_ files $ \x -> do
           removeFile x
           putDoc $ red (text "  D ") <+> text x <> linebreak
 
-        putStrLn $ "Deleted " ++ show n ++ " " ++ pluralize "item" n ++"."
+        putStrLn $ "Deleted " ++ show n ++ " " ++ pluralize n "item" ++ "."
 
-(<//>) :: IO FilePath -> FilePath -> IO FilePath
-io <//> p = (</>) <$> io <*> pure p
+(/>) :: IO FilePath -> FilePath -> IO FilePath
+io /> p = (</>) <$> io <*> pure p
+infix 4 />
 
 itunesMedia :: IO FilePath
-itunesMedia = getHomeDirectory <//> ("Music" </> "iTunes" </> "iTunes Media")
+itunesMedia = getHomeDirectory /> "Music" </> "iTunes" </> "iTunes Media"
 
 addToItunes :: FilePath -> IO ()
 addToItunes file = do
-  dest <- itunesMedia <//> ("Automatically Add to iTunes.localized" </> takeFileName file)
+  dest <- itunesMedia /> "Automatically Add to iTunes.localized" </> takeFileName file
   copyFile file dest
   putDoc $ green (text "  A ") <+> text (takeFileName file) <> linebreak
 
@@ -113,9 +114,9 @@ fileOrDirectoryExists :: FilePath -> IO Bool
 fileOrDirectoryExists x = or <$> sequence [doesDirectoryExist x, doesFileExist x]
 
 type Count = Int
-pluralize :: String -> Count -> String
-pluralize str 1 = str
-pluralize str _ = str ++ "s"
+pluralize :: Count -> String -> String
+pluralize 1 str = str
+pluralize _ str = str ++ "s"
 
 type Default = Bool
 getYesOrNo :: Default -> IO Bool
