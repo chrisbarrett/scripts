@@ -138,7 +138,10 @@ selectMedia :: FileType -> IO [FilePath]
 selectMedia (Media m)   = return [m]
 selectMedia Unsupported = return []
 selectMedia (Zip z)     =
-  extractFilesFromArchive []
+  withArchive z $ do
+    ns <- liftM (filter isMedia) entryNames
+    dest <-
+    extractFiles
 
 --- Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
