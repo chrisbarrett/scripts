@@ -105,8 +105,9 @@ addToItunes file = do
   putDoc $ green (text "  A ") <+> text (takeFileName file) <> linebreak
 
 --- Valid media extensions
-mediaExtensions :: [String]
-mediaExtensions = [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
+isMedia :: FilePath -> Bool
+isMedia path = takeExtension path `elem` [".m4a", ".m4v", ".mov",
+                                     ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
 
 --- Search for media files under the given filepath.
 mediaFromPath :: FilePath -> IO [FilePath]
@@ -118,7 +119,7 @@ mediaFromPath path = do
 
 --- Inspect the given file and determine whether it is an actionable type.
 categoriseType :: FilePath -> IO FileType
-categoriseType = undefined
+categoriseType (path, isMedia -> True) = return (Media path)
 
 --- Map the given file to its media items. Search archives for media.
 selectMedia :: FileType -> IO [FilePath]
