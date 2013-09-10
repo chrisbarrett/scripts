@@ -122,7 +122,7 @@ mediaFromPath path = do
 categoriseType :: FilePath -> IO FileType
 categoriseType path@(isMedia -> True) = return (Media path)
 
---- map the given file to its media items. Search archives for media.
+--- Map the given file to its media items. Search archives for media.
 selectMedia :: FileType -> IO [FilePath]
 selectMedia (Media m)   = return [m]
 selectMedia Unsupported = return []
