@@ -14,6 +14,7 @@
  CABAL DEPENDENCIES:
   ansi-wl-pprint
   zip-conduit = 0.2.2
+  temporary = 1.1
 
 -}
 
@@ -29,6 +30,7 @@ import           System.Directory
 import           System.Environment           (getArgs)
 import           System.Exit                  (exitFailure)
 import           System.FilePath.Posix
+import           System.IO.Temp
 import           Text.PrettyPrint.ANSI.Leijen (dullyellow, green, linebreak,
                                                putDoc, red, text, (<+>), (<>))
 
@@ -139,9 +141,9 @@ selectMedia (Media m)   = return [m]
 selectMedia Unsupported = return []
 selectMedia (Zip z)     =
   withArchive z $ do
-    ns <- liftM (filter isMedia) entryNames
-    dest <-
-    extractFiles
+    media <- liftM (filter isMedia) entryNames
+    dest <- liftM createTempDirectory getTemporaryDirectory
+    extractFiles media dest
 
 --- Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
