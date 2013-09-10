@@ -146,6 +146,7 @@ selectMedia Unsupported = return []
 selectMedia (Zip z)     = do
   tmp <- getTemporaryDirectory
   dest <- createTempDirectory tmp "zip"
+  putStrLn $ "Extracting media from " ++ z ++ "..."
   withArchive z $ do
     media <- liftM (filter isMedia) entryNames
     extractFiles media dest
