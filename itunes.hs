@@ -121,6 +121,7 @@ mediaFromPath path = do
 --- Inspect the given file and determine whether it is an actionable type.
 categoriseType :: FilePath -> IO FileType
 categoriseType path@(isMedia -> True) = return (Media path)
+categoriseType _ = return Unsupported
 
 --- Map the given file to its media items. Search archives for media.
 selectMedia :: FileType -> IO [FilePath]
