@@ -144,9 +144,9 @@ selectMedia :: FileType -> IO [FilePath]
 selectMedia (Media m)   = return [m]
 selectMedia Unsupported = return []
 selectMedia (Zip z)     = do
+  putStrLn $ "Extracting media from " ++ z ++ "..."
   tmp <- getTemporaryDirectory
   dest <- createTempDirectory tmp "zip"
-  putStrLn $ "Extracting media from " ++ z ++ "..."
   withArchive z $ do
     media <- liftM (filter isMedia) entryNames
     extractFiles media dest
