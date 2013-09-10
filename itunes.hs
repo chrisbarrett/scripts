@@ -133,7 +133,7 @@ categoriseType p = do
     _    ->  Unsupported
 
 readNFileBytes :: Int -> FilePath -> IO String
-readNFileBytes n p = withFile p ReadMode $ \h -> liftM (take n) (hGetContents h)
+readNFileBytes n p = withFile p ReadMode $ \h ->  (hGetContents h)
 
 --- Map the given file to its media items. Search archives for media.
 selectMedia :: FileType -> IO [FilePath]
