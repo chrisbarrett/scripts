@@ -127,7 +127,7 @@ mediaFromPath path = do
 categoriseType :: FilePath -> IO FileType
 categoriseType p@(isMedia -> True) = return (Media p)
 categoriseType p = do
-  -- Read file header.
+  -- Read magic string from file header to determine type.
   bs <- liftM (L8.unpack . L8.take 2) (L8.readFile p)
   return $ case bs of
     "PK" -> Zip p
