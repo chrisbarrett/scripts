@@ -139,10 +139,11 @@ categoriseType p = do
 selectMedia :: FileType -> IO [FilePath]
 selectMedia (Media m)   = return [m]
 selectMedia Unsupported = return []
-selectMedia (Zip z)     =
+selectMedia (Zip z)     = do
+  tmp <- getTemporaryDirectory
+  dest <- createTempDirectory tmp "zip"
   withArchive z $ do
     media <- liftM (filter isMedia) entryNames
-    dest <- createTempDirectory getTemporaryDirectory "zip"
     extractFiles media dest
 
 --- Walk the directory tree to find all files below a given path.
