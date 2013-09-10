@@ -122,7 +122,7 @@ categoriseType = undefined
 
 --- Map the given file to its media items. Search archives for media.
 selectMedia :: FileType -> IO [FilePath]
-selectMedia (Media m) = return [m]
+selectMedia (Media m)   = return [m]
 selectMedia (Archive _) = undefined
 selectMedia Unsupported = return []
 
