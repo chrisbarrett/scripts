@@ -13,6 +13,7 @@
 
  CABAL DEPENDENCIES:
   ansi-wl-pprint
+  Codec.Archive.Zip
 
 -}
 
