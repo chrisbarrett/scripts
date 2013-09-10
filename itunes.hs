@@ -113,7 +113,7 @@ mediaFromPath :: FilePath -> IO [FilePath]
 mediaFromPath path = do
   exists <- fileOrDirectoryExists path
   if exists
-    then selectMeda $ categoriseType $ getFilesInTree path
+    then selectMedia $ categoriseType $ getFilesInTree path
     else return []
 
 --- Walk the directory tree to find all files below a given path.
