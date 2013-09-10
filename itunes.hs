@@ -128,7 +128,7 @@ mediaFromPath path = do
 categoriseType :: FilePath -> IO FileType
 categoriseType p@(isMedia -> True) = return (Media p)
 categoriseType p = do
-  bs <- L8.unpack $ L8.take 2 $ L8.readFile p
+  bs <- L8.readFile p >>= L8.take 2 >>= L8.unpack
   return $ case bs of
     "PK" -> Zip p
     _         ->  Unsupported
