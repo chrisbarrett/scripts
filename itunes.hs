@@ -137,7 +137,7 @@ categoriseType p = do
   bs <- liftM (L8.unpack . L8.take 2) (L8.readFile p)
   return $ case bs of
     "PK" -> Zip p
-    _    ->  Unsupported
+    _    -> Unsupported
 
 --- Map the given file to its media items. Search archives for media.
 selectMedia :: FileType -> IO [FilePath]
