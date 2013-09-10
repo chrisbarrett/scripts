@@ -121,7 +121,7 @@ categoriseType :: FilePath -> IO FileType
 categoriseType = undefined
 
 --- Map the given file to its media items. Search archives for media.
-selectMeda :: FileType -> IO [FilePath]
+selectMedia :: FileType -> IO [FilePath]
 selectMedia = undefined
 
 --- Walk the directory tree to find all files below a given path.
