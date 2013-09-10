@@ -28,6 +28,7 @@ import           System.Directory
 import           System.Environment           (getArgs)
 import           System.Exit                  (exitFailure)
 import           System.FilePath.Posix
+import           System.IO
 import           Text.PrettyPrint.ANSI.Leijen (dullyellow, green, linebreak,
                                                putDoc, red, text, (<+>), (<>))
 
@@ -110,7 +111,8 @@ addToItunes file = do
 --- Valid media extensions
 isMedia :: FilePath -> Bool
 isMedia path = takeExtension path `elem` [".m4a", ".m4v", ".mov",
-                                     ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
+                                     ".mp4", ".mp3", ".mpg",
+                                     ".aac", ".aiff"]
 
 --- Search for media files under the given filepath.
 mediaFromPath :: FilePath -> IO [FilePath]
@@ -122,8 +124,12 @@ mediaFromPath path = do
 
 --- Inspect the given file and determine whether it is an actionable type.
 categoriseType :: FilePath -> IO FileType
-categoriseType path@(isMedia -> True) = return (Media path)
-categoriseType _ = return Unsupported
+categoriseType p@(isMedia -> True) = return (Media p)
+categoriseType p = do
+  bs <- withFile p ReadMode $ \h -> liftM (take 2) (hGetContents h)
+  return $ case bs of
+    "PK" -> Zip p
+    _    ->  Unsupported
 
 --- Map the given file to its media items. Search archives for media.
 selectMedia :: FileType -> IO [FilePath]
