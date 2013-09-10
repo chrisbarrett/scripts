@@ -13,7 +13,7 @@
 
  CABAL DEPENDENCIES:
   ansi-wl-pprint
-  zip-archive = 0.1.3.4
+  zip-conduit = 0.2.2
 
 -}
 
@@ -137,7 +137,8 @@ categoriseType p = do
 selectMedia :: FileType -> IO [FilePath]
 selectMedia (Media m)   = return [m]
 selectMedia Unsupported = return []
-selectMedia (Zip _)     = undefined
+selectMedia (Zip z)     =
+  extractFilesFromArchive []
 
 --- Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
