@@ -40,7 +40,6 @@ data Args = Add [FilePath] | Help | Invalid | Unknown String
 
 --- Enumerates different filetypes that need to be handled when searching for media.
 data FileType = Media FilePath | Zip FilePath | Unsupported
-              deriving Show
 
 main :: IO ()
 main = getArgs >>= execute . parseArgs
