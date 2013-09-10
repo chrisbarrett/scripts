@@ -29,7 +29,6 @@ import           System.Directory
 import           System.Environment           (getArgs)
 import           System.Exit                  (exitFailure)
 import           System.FilePath.Posix
-import           System.IO
 import           Text.PrettyPrint.ANSI.Leijen (dullyellow, green, linebreak,
                                                putDoc, red, text, (<+>), (<>))
 
