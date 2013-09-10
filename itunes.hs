@@ -135,7 +135,7 @@ categoriseType p = do
 --- Map the given file to its media items. Search archives for media.
 selectMedia :: FileType -> IO [FilePath]
 selectMedia (Media m)   = return [m]
-selectMedia Unsupported = return []
+selectMedia (Unsupported _) = return []
 selectMedia (Zip _)     = undefined
 
 --- Walk the directory tree to find all files below a given path.
