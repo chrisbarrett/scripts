@@ -37,7 +37,7 @@ data Args = Add [FilePath] | Help | Invalid | Unknown String
           deriving Show
 
 --- Enumerates different filetypes that need to be handled when searching for media.
-data FileType = Media FilePath | Zip FilePath | Unsupported
+data FileType = Media FilePath | Zip FilePath | Unsupported String
               deriving Show
 
 main :: IO ()
@@ -130,7 +130,7 @@ categoriseType p = do
   bs <- liftM (L8.unpack . L8.take 2) (L8.readFile p)
   return $ case bs of
     "PK" -> Zip p
-    _         ->  Unsupported
+    _         ->  Unsupported bs
 
 --- Map the given file to its media items. Search archives for media.
 selectMedia :: FileType -> IO [FilePath]
