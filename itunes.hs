@@ -133,7 +133,7 @@ getFilesInTree d = do
   case (isDir, isFile) of
     (True, _) -> concat <$> (getDirectoryContents d >>= mapM (getFilesInTree . (</>) d))
     (_, True) -> return [d]
-    _ -> return []
+    _         -> return []
 
 --- Test whether the given file or directory exists.
 fileOrDirectoryExists :: FilePath -> IO Bool
