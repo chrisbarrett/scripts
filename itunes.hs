@@ -36,7 +36,7 @@ data Args = Add [FilePath] | Help | Invalid | Unknown String
           deriving Show
 
 --- Enumerates different filetypes that need to be handled when searching for media.
-data FileType = Media FilePath | Archive FilePath | Unsupported
+data FileType = Media FilePath | Zip FilePath | Unsupported
 
 main :: IO ()
 main = getArgs >>= execute . parseArgs
@@ -129,7 +129,7 @@ categoriseType _ = return Unsupported
 selectMedia :: FileType -> IO [FilePath]
 selectMedia (Media m)   = return [m]
 selectMedia Unsupported = return []
-selectMedia (Archive _) = undefined
+selectMedia (Zip _)     = undefined
 
 --- Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
