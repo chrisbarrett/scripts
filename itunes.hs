@@ -42,6 +42,8 @@ data Args = Add [FilePath] | Help | Invalid | Unknown String
 data FileType = Media FilePath | Zip FilePath | Unsupported
               deriving Show
 
+
+
 main :: IO ()
 main = getArgs >>= execute . parseArgs
   where
