@@ -127,10 +127,13 @@ mediaFromPath path = do
 categoriseType :: FilePath -> IO FileType
 categoriseType p@(isMedia -> True) = return (Media p)
 categoriseType p = do
-  bs <- withFile p ReadMode $ \h -> liftM (take 2) (hGetContents h)
+  bs <- readNFileBytes 2 p
   return $ case bs of
     "PK" -> Zip p
     _    ->  Unsupported
+
+readNFileBytes :: Int -> FilePath -> IO String
+readNFileBytes n p = withFile p ReadMode $ \h -> liftM (take n) (hGetContents h)
 
 --- Map the given file to its media items. Search archives for media.
 selectMedia :: FileType -> IO [FilePath]
