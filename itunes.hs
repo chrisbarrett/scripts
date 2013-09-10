@@ -137,10 +137,6 @@ categoriseType p = do
 isZipByteString :: ByteString -> Bool
 isZipByteString bs = L8.pack "PK" == L8.take 2 bs
 
-
-readNFileBytes :: FilePath -> IO String
-readNFileBytes p = withFile p ReadMode $ \h ->  (hGetContents h)
-
 --- Map the given file to its media items. Search archives for media.
 selectMedia :: FileType -> IO [FilePath]
 selectMedia (Media m)   = return [m]
