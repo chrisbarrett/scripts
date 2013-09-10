@@ -82,7 +82,11 @@ execute (Add args)    = do
       notExists <- filterM (liftM not . fileOrDirectoryExists) paths
       unless (null notExists) $ do
         putDoc $ dullyellow (text "Warning: the following items do not exist:") <> linebreak
-        mapM_ (\x -> putDoc $ dullyellow (text "  ? ") <+> text x <> linebreak) notExists
+        mapM_ (\x -> putDoc $
+                    dullyellow (text "  ? ")
+                    <+> text (takeFileName x)
+                    <> linebreak)
+          notExists
 
     promptDeleteOriginals files = do
       let n = length files
