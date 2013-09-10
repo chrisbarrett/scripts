@@ -30,7 +30,6 @@ import           System.Directory
 import           System.Environment           (getArgs)
 import           System.Exit                  (exitFailure)
 import           System.FilePath.Posix
-import           System.IO
 import           Text.PrettyPrint.ANSI.Leijen (dullyellow, green, linebreak,
                                                putDoc, red, text, (<+>), (<>))
 
@@ -129,13 +128,10 @@ mediaFromPath path = do
 categoriseType :: FilePath -> IO FileType
 categoriseType p@(isMedia -> True) = return (Media p)
 categoriseType p = do
-  bs <- readNFileBytes p
+  bs <- L8.unpack $ L8.take 2 $ L8.readFile p
   return $ case bs of
-    'P':'K':_ -> Zip p
+    "PK" -> Zip p
     _         ->  Unsupported
-
-isZipByteString :: ByteString -> Bool
-isZipByteString bs = L8.pack "PK" == L8.take 2 bs
 
 --- Map the given file to its media items. Search archives for media.
 selectMedia :: FileType -> IO [FilePath]
