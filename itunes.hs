@@ -134,6 +134,10 @@ categoriseType p = do
     'P':'K':_ -> Zip p
     _         ->  Unsupported
 
+isZipByteString :: ByteString -> Bool
+isZipByteString bs = L8.pack "PK" == L8.take 2 bs
+
+
 readNFileBytes :: FilePath -> IO String
 readNFileBytes p = withFile p ReadMode $ \h ->  (hGetContents h)
 
