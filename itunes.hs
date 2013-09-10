@@ -18,6 +18,7 @@
 -}
 
 {-# LANGUAGE ScopedTypeVariables #-}
+import           Codec.Archive.Zip
 import           Control.Applicative
 import           Control.Exception
 import           Control.Monad
