@@ -22,6 +22,8 @@ import           Codec.Archive.Zip
 import           Control.Applicative
 import           Control.Exception
 import           Control.Monad
+import           Data.ByteString.Lazy         as L
+import           Data.ByteString.Lazy.Char8   as L8
 import           Data.Char                    (toLower)
 import           Prelude                      hiding (catch)
 import           System.Directory
