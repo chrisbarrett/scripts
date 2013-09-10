@@ -113,7 +113,7 @@ mediaFromPath :: FilePath -> IO [FilePath]
 mediaFromPath path = do
   exists <- fileOrDirectoryExists path
   if exists
-    then selectMedia $ categoriseType $ getFilesInTree path
+    then getFilesInTree path >>= categoriseType >>= selectMedia
     else return []
 
 --- Inspect the given file and determine whether it is an actionable type.
