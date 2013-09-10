@@ -61,7 +61,7 @@ execute (Add args)    = do
   unless itunesExists $ putStrLn "Cannot find iTunes Media folder" >> exitFailure
   paths <- pathsFromArgs
   warnWhereNotExists paths
-  media <- mapM mediaFromPath paths
+  media <- mapM mediaFromPath paths >>= return . concat
   when (null media) $ putStrLn "No media found." >> exitFailure
   mapM_ addToItunes media
   promptDeleteOriginals media
