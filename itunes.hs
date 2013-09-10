@@ -145,7 +145,7 @@ selectMedia (Zip z)     = do
   withArchive z $ do
     media <- liftM (filter isMedia) entryNames
     extractFiles media dest
-  return $ mediaFromPath dest
+  mediaFromPath dest
 
 --- Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
