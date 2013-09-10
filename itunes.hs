@@ -13,7 +13,7 @@
 
  CABAL DEPENDENCIES:
   ansi-wl-pprint
-  zip-archive = 0.1.1.3
+  zip-archive = 0.1.3.4
 
 -}
 
