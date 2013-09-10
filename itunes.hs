@@ -13,7 +13,7 @@
 
  CABAL DEPENDENCIES:
   ansi-wl-pprint
-  Codec.Archive.Zip = 0.1.1.3
+  zip-archive = 0.1.1.3
 
 -}
 
