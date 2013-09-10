@@ -142,8 +142,9 @@ selectMedia Unsupported = return []
 selectMedia (Zip z)     =
   withArchive z $ do
     media <- liftM (filter isMedia) entryNames
-    dest <- liftM createTempDirectory getTemporaryDirectory
-    extractFiles media dest
+    tmp <- getTemporaryDirectory
+    dest <- createTempDirectory tmp "zip"
+    return $ extractFiles media dest
 
 --- Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
