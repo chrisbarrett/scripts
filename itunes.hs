@@ -89,7 +89,7 @@ execute (Add args)    = do
         putStrLn $ "Deleted " ++ show n ++ " " ++ pluralize n "item" ++ "."
 
 --- Concatenate a monadic filepath with pure filepaths.
-(/>) :: IO FilePath -> FilePath -> m FilePath
+(/>) :: IO FilePath -> FilePath -> IO FilePath
 io /> p = (</>) <$> io <*> pure p
 infix 4 />
 
