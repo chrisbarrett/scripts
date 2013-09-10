@@ -116,6 +116,13 @@ mediaFromPath path = do
     then selectMedia $ categoriseType $ getFilesInTree path
     else return []
 
+--- Inspect the given file and determine whether it is an actionable type.
+categoriseType :: FilePath -> IO FileType
+categoriseType = undefined
+
+--- Map the given file to its media items. Search archives for media.
+selectMedia = undefined
+
 --- Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
 getFilesInTree d | takeFileName d `elem` [".", ".."] = return []
