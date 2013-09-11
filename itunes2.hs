@@ -223,7 +223,11 @@ instance Describable Zip where
   describe (Zip z) = show z
 
 instance Importable Zip where
-  runImport path z =
+  runImport dest (Zip z) = do
+    withArchive z $ do
+      media <- liftM (filter isMedia) entryNames
+      extractFiles media dest
+
 
 instance Deleteable Zip where
   delete (Zip z) = removeFile z
