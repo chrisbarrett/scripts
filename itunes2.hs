@@ -141,7 +141,7 @@ getYesOrNo deflt = do
     _    -> getYesOrNo deflt
 
 --------------------------------------------------------------------------------
--- Filesystem utilities
+-- File system utilities
 
 -- | Filter the input files for importable items.
 mediaFromPath :: (Importable a, Describable a, Deleteable a) => FilePath -> IO [a]
