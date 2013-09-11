@@ -219,13 +219,16 @@ asZipFile p = do
     True  -> Just $ Zip p
     False -> Nothing
 
+zipMedia :: Zip -> Archive [String]
+zipMedia (Zip z) = liftM (filter isMedia) entryNames
+
 instance Describable Zip where
   describe (Zip z) = show z
 
 instance Importable Zip where
-  runImport dest (Zip z) = do
-    withArchive z $ do
-      media <- liftM (filter isMedia) entryNames
+  runImport dest z@(Zip f) = do
+    withArchive f $ do
+      media <- zipMedia z
       extractFiles media dest
 
 
