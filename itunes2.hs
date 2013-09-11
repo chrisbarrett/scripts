@@ -100,7 +100,7 @@ execute (Add args)    = do
 
     -- | The path to the iTunes import folder.
     itunesImportFolder :: IO FilePath
-    itunesImportFolder  = getHomeDirectory /> "Music" </> "iTunes" </> "iTunes Media"
+    itunesImportFolder  = ( getHomeDirectory /> "Music" </> "iTunes" </> "iTunes Media" )
                           /> "Automatically Add to iTunes.localized"
 
     -- | Import each media item into iTumes.
