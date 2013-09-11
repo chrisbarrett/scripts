@@ -137,11 +137,16 @@ getYesOrNo deflt = do
 --------------------------------------------------------------------------------
 
 -- | Represents things that can be imported into iTunes.
-class Importable m where
+class Importable a where
   -- | Add the given media to the iTunes library.
-  addToItunes :: m -> IO ()
+  addToItunes :: a -> IO ()
   -- | String representation of the given item, for feedback in the UI.
-  describe :: m -> String
+  describe :: a -> String
+
+-- | Represents things that can be deleted.
+class Deleteable a where
+  -- | Delete the given item.
+  delete :: a -> IO ()
 
 --------------------------------------------------------------------------------
 -- Media files
@@ -155,30 +160,36 @@ instance Importable MediaFile where
     copyFile file dest
     putDoc $ green (text "  A ") <+> text (takeFileName file) <> linebreak
 
+-- | True if the given file can be imported by iTunes.
+isMedia :: FilePath -> Bool
+isMedia p = p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
+
+
+instance Deleteable MediaFile where
+  delete (MediaFile f) = removeFile f
+
 --------------------------------------------------------------------------------
 -- Zip files
 
 newtype Zip = Zip FilePath
 
+-- | Read file header to test whether the given path points to a zip archive.
+isZipFile :: FilePath -> IO Bool
+isZipFile p = liftM (( (==) "PK" ) . L8.unpack . L8.take 2) (L8.readFile p)
+
 -- | Construct a Zip instance from the given file if it is a zip file.
 asZipFile :: FilePath -> IO (Maybe Zip)
 asZipFile p = do
-  -- Read magic string from file header to determine type.
-  bs <- liftM (L8.unpack . L8.take 2) (L8.readFile p)
-  return $ case bs of
-    "PK" -> Just $ Zip p
-    _    -> Nothing
+  isZip <- isZipFile p
+  return $ case isZip of
+    True  -> Just $ Zip p
+    False -> Nothing
 
 instance Importable Zip where
   describe = show
   addToItunes z =
 
-
-
-
--- | True if the given file can be imported by iTunes.
-isMedia :: FilePath -> Bool
-isMedia p = p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
+--------------------------------------------------------------------------------
 
 -- | Filter the input files for addable items.
 filterMedia :: Importable a => [FilePath] -> IO [a]
