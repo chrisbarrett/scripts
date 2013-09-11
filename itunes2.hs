@@ -71,7 +71,7 @@ execute (Add args)    = do
   xs <- liftM concat $ mapM mediaFromPath paths
   when (null xs) $ putStrLn "No media found." >> exitFailure
 
-  let files = map fst xs
+  let files = filter isJust $ map fst xs
       media = map snd xs
   importMedia media
   promptDeleteOriginals files
