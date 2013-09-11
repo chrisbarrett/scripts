@@ -117,7 +117,7 @@ execute (Add args)    = do
     importMedia = mapM_ $ \x -> do
       dest <- itunesImportFolder
       tasks <- importTasks dest x
-      forM_ tasks $ \t ->
+      forM_ tasks $ \t -> do
         runTask t
         putDoc $ green (text "  A ") <+> text (taskName t)  <> linebreak
 
