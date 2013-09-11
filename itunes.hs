@@ -39,7 +39,8 @@ data Args = Add [FilePath] | Help | Invalid | Unknown String
           deriving Show
 
 --- Enumerates the different media form that will be added to iTunes.
-data MediaType = File FilePath | Stream L8.ByteString Name
+data MediaType = File FilePath
+               | Stream L8.ByteString Name
 type Name = String
 
 --- Enumerates different filetypes that need to be handled when searching for media.
