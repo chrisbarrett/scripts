@@ -86,7 +86,7 @@ execute (Add args)    = do
           notExists
 
     -- | Prompt the user whether to delete the original items after importing.
-    promptDeleteOriginals :: Deleteable a => [a] -> IO ()
+    promptDeleteOriginals :: ( Deleteable a, Describable a) => [a] -> IO ()
     promptDeleteOriginals xs = do
       let n = length xs
       putStrLn $ "Delete original " ++ pluralize n "item" ++ "? (y/n) [n] "
