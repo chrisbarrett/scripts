@@ -26,7 +26,6 @@ import           Control.Exception
 import           Control.Monad
 import qualified Data.ByteString.Lazy.Char8   as L8
 import           Data.Char                    (toLower)
-import           Data.Maybe                   (fromJust, isJust)
 import           Prelude                      hiding (catch)
 import           System.Directory
 import           System.Environment           (getArgs)
