@@ -1,5 +1,4 @@
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE ViewPatterns        #-}
 {-
 
  itunes
@@ -127,40 +126,18 @@ addToItunes (File file) = do
   putDoc $ green (text "  A ") <+> text (takeFileName file) <> linebreak
 addToItunes (Stream bs name _) = undefined
 
---- Valid media extensions
 isMedia :: FilePath -> Bool
-isMedia path = takeExtension path `elem` [".m4a", ".m4v", ".mov",
-                                     ".mp4", ".mp3", ".mpg",
-                                     ".aac", ".aiff"]
+isMedia p = p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
 
---- Search for media files under the given filepath.
-mediaFromPath :: FilePath -> IO [MediaType]
-mediaFromPath path = do
-  exists <- fileOrDirectoryExists path
-  if exists
-    then liftM concat $ getFilesInTree path >>= mapM categoriseType >>= mapM selectMedia
-    else return []
 
---- Inspect the given file and determine whether it is an actionable type.
-categoriseType :: FilePath -> IO FileType
-categoriseType p@(isMedia -> True) = return $ Media (File p)
-categoriseType p = do
+
+asZipFile :: FilePath -> IO Bool
+asZipFile p = do
   -- Read magic string from file header to determine type.
   bs <- liftM (L8.unpack . L8.take 2) (L8.readFile p)
   return $ case bs of
-    "PK" -> Zip p
-    _    -> Unsupported
-
---- Map the given file to its media items. Search archives for media.
-selectMedia :: FileType -> IO [MediaType]
-selectMedia (Media m)   = return [m]
-selectMedia Unsupported = return []
-selectMedia (Zip z)     = do
-  putStrLn $ "Extracting media from " ++ z ++ "..."
-  withArchive z $ do
-    media <- liftM (filter isMedia) entryNames
-    eachM (\ x -> sourceEntry x, x) media >>= mapM \bs ->
-      Stream bs
+    "PK" -> Just $ Zip p
+    _    -> Nothing
 
 --- Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
