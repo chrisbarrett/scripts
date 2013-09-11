@@ -190,9 +190,10 @@ asMediaFile p@(isMedia -> True) = return $ Just $ MediaFile p
 asMediaFile _ = return Nothing
 
 instance Importable MediaFile where
-  importTasks dest (MediaFile f) = { taskName = takeFileName f
-                                   , runTask = copyFile f $ dest </> takeFileName f
-                                   }
+  importTasks dest (MediaFile f) =
+    return { taskName = takeFileName f
+           , runTask = copyFile f $ dest </> takeFileName f
+           }
 
 --------------------------------------------------------------------------------
 -- Zip files
