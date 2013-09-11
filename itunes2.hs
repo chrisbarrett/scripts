@@ -1,3 +1,4 @@
+{-# LANGUAGE DatatypeContexts    #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections       #-}
 {-# LANGUAGE ViewPatterns        #-}
