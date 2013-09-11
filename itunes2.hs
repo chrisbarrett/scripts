@@ -147,7 +147,7 @@ getYesOrNo deflt = do
 -- Filesystem utilities
 
 -- | Filter the input files for importable items.
-mediaFromPath :: (Importable a, Deleteable a) => FilePath -> IO [a]
+mediaFromPath :: FilePath -> IO [(Maybe FilePath, ImportTask)]
 mediaFromPath p = undefined
 
 -- | Walk the directory tree to find all files below a given path.
