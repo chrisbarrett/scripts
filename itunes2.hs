@@ -90,7 +90,7 @@ execute (Add args)    = do
           notExists
 
     -- | Prompt the user whether to delete the original items after importing.
-    promptDeleteOriginals ::  -> IO ()
+    promptDeleteOriginals :: [FilePath] -> IO ()
     promptDeleteOriginals xs = do
       let n = length xs
       putStrLn $ "Delete original " ++ pluralize n "item" ++ "? (y/n) [n] "
