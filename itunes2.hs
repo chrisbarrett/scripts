@@ -192,8 +192,10 @@ asZipFile p = do
     True  -> Just $ Zip p
     False -> Nothing
 
-instance Importable Zip where
+instance Describable Zip where
   describe (Zip f) = show f
+
+instance Importable Zip where
   runImport z = undefined
 
 instance Deleteable Zip where
