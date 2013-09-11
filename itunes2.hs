@@ -158,10 +158,6 @@ getFilesInTree d = do
     (_, True) -> return [d]
     _         -> return []
 
--- | True if the given file can be imported by iTunes.
-isMedia :: FilePath -> Bool
-isMedia p = takeExtension p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
-
 --------------------------------------------------------------------------------
 -- Type classes
 
@@ -184,6 +180,15 @@ class Deleteable a where
 -- Media files
 
 newtype MediaFile = MediaFile FilePath
+
+-- | True if the given file can be imported by iTunes.
+isMedia :: FilePath -> Bool
+isMedia p = takeExtension p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
+
+-- | Construct a MediaFile instance from the given file if it is importable.
+asMediaFile :: FilePath -> IO (Maybe MediaFile)
+asMediaFile p@(isMedia, True) = return $ Just $ MediaFile p
+asMediaFile _ = return Nothing
 
 instance Describable MediaFile where
   describe (MediaFile f) = takeFileName f
