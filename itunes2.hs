@@ -90,7 +90,7 @@ execute (Add args)    = do
           notExists
 
     -- | Prompt the user whether to delete the original items after importing.
-    promptDeleteOriginals :: (Deleteable a, Describable a) => [a] -> IO ()
+    promptDeleteOriginals ::  -> IO ()
     promptDeleteOriginals xs = do
       let n = length xs
       putStrLn $ "Delete original " ++ pluralize n "item" ++ "? (y/n) [n] "
@@ -165,19 +165,22 @@ getFilesInTree d = do
 -- Common types
 
 -- | Associates an item to import with a label for UI feedback.
-data ImportTask = ImportTask
-                  { taskName :: String
-                  , runTask  :: IO () }
+data Task = Task
+            { taskName :: String
+            , runTask  :: IO () }
+
+newtype ImportTask = ImportTask Task
+newtype DeletionTask = DeletionTask Task
 
 -- | Represents things that can be imported into iTunes.
 class Importable a where
   -- | Add the given media to the iTunes library.
-  getImports :: FilePath -> a -> IO [ImportTask]
+  importTasks :: FilePath -> a -> IO [ImportTask]
 
 -- | Represents things that can be deleted.
 class Deleteable a where
   -- | Delete the given item.
-  delete :: a -> IO ()
+  deletionTask :: a -> IO DeletionTask
 
 --------------------------------------------------------------------------------
 -- Media files
