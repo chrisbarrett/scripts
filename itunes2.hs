@@ -26,6 +26,7 @@ import           Control.Monad
 import qualified Data.ByteString.Lazy.Char8   as L8
 import           Data.Char                    (toLower)
 import qualified Data.Conduit.Binary          as CB
+import           Data.Maybe                   (isJust)
 import           Prelude                      hiding (catch)
 import           System.Directory
 import           System.Environment           (getArgs)
