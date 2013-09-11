@@ -216,9 +216,9 @@ asZipFile p = do
     False -> Nothing
 
 instance Importable Zip where
-  importTasks dest z@(Zip f) = withArchive f $ do
-    entryNames >>= mapM $ \x ->
-      return $ ImportTask { taskName = x
-                          , runTask = \() -> withArchive f $ do
-                            extractFiles [x] dest
-                          }
+  importTasks dest (Zip f) = withArchive f $ do
+    entries <- liftM (filter isMedia) entryNames
+    forM entries $ \x ->
+      return ImportTask { taskName = x
+                        , runTask = withArchive f $ extractFiles [x] dest
+                        }
