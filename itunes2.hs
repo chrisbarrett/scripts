@@ -231,6 +231,5 @@ instance Importable Zip where
       media <- zipMedia z
       extractFiles media dest
 
-
 instance Deleteable Zip where
   delete (Zip z) = removeFile z
