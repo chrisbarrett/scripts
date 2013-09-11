@@ -195,8 +195,7 @@ instance Describable MediaFile where
   describe (MediaFile f) = takeFileName f
 
 instance Importable MediaFile where
-  runImport dest (MediaFile f) = do
-    copyFile f $ dest </> takeFileName f
+  runImport dest (MediaFile f) = copyFile f $ dest </> takeFileName f
 
 instance Deleteable MediaFile where
   delete (MediaFile f) = removeFile f
@@ -221,10 +220,10 @@ asZipFile p = do
     False -> Nothing
 
 instance Describable Zip where
-  describe (Zip f) = show f
+  describe (Zip z) = show z
 
 instance Importable Zip where
-  runImport z = undefined
+  runImport path z =
 
 instance Deleteable Zip where
-  delete (Zip f) = removeFile f
+  delete (Zip z) = removeFile z
