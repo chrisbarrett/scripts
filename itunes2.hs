@@ -197,9 +197,8 @@ instance Deleteable Zip where
 --------------------------------------------------------------------------------
 
 -- | Filter the input files for importable items.
-filterImportable :: Importable a => [FilePath] -> IO [a]
-filterImportable xs = do
-
+mediaFromPath :: Importable a => FilePath -> IO [a]
+mediaFromPath p = undefined
 
 -- | Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
