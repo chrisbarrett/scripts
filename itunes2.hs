@@ -114,8 +114,9 @@ execute (Add args)    = do
 
     -- | Import each media item into iTunes.
     importMedia :: [ImportTask] -> IO ()
-    importMedia tasks = forM_ tasks $ \t ->
-      runTask t >> putDoc $ green (text "  A ") <+> text (taskName t)  <> linebreak
+    importMedia tasks = forM_ tasks $ \t -> do
+      runTask t
+      putDoc $ green (text "  A ") <+> text (taskName t)  <> linebreak
 
 
 -- | Concatenate a monadic filepath with pure filepaths.
