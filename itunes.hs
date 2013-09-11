@@ -119,7 +119,7 @@ addToItunes (File file) = do
   dest <- itunesMedia /> "Automatically Add to iTunes.localized" </> takeFileName file
   copyFile file dest
   putDoc $ green (text "  A ") <+> text (takeFileName file) <> linebreak
-addToItunes (Stream bs) = undefined
+addToItunes (Stream bs name) = undefined
 
 --- Valid media extensions
 isMedia :: FilePath -> Bool
