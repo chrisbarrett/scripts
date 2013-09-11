@@ -192,7 +192,10 @@ asMediaFile p@(isMedia -> True) = return $ Just $ MediaFile p
 asMediaFile _ = return Nothing
 
 instance Importable MediaFile where
-  runImport dest (MediaFile f) = copyFile f $ dest </> takeFileName f
+  getImports dest (MediaFile f) =
+    return { itemName = takeFileName f
+           , action = copyFile f $ dest </> takeFileName f
+           }
 
 instance Deleteable MediaFile where
   delete (MediaFile f) = removeFile f
