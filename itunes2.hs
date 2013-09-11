@@ -138,6 +138,7 @@ getYesOrNo deflt = do
     _    -> getYesOrNo deflt
 
 --------------------------------------------------------------------------------
+-- Type classes
 
 -- | Represents things that can be imported into iTunes.
 class Importable a where
