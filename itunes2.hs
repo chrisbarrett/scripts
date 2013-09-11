@@ -111,7 +111,7 @@ execute (Add args)    = do
                           /> "Automatically Add to iTunes.localized"
 
     -- | Import each media item into iTunes.
-    importMedia :: ImportItem -> IO ()
+    importMedia :: Importable -> IO ()
     importMedia x =
       liftM importTasks itunesImportFolder >>= mapM $ \t ->
         runTask t
@@ -148,8 +148,8 @@ getYesOrNo deflt = do
 -- Filesystem utilities
 
 -- | Filter the input files for importable items.
-mediaFromPath :: FilePath -> IO [(Maybe FilePath, ImportItem)]
-mediaFromPath p@(isMedia -> True) = return [ (Just p, ImportItem $ MediaFile p) ]
+mediaFromPath :: FilePath -> IO [(Maybe FilePath, Importable)]
+mediaFromPath p@(isMedia -> True) = return [ (Just p, MediaFile p) ]
 
 -- | Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
@@ -162,6 +162,20 @@ getFilesInTree d = do
     (_, True) -> return [d]
     _         -> return []
 
+-- | Create tasks to add the given media to the iTunes library.
+importTasks :: FilePath -> a -> IO [ImportTask]
+
+importTasks dest (MediaFile f) =
+  return [ ImportTask { taskName = takeFileName f
+                      , runTask = copyFile f $ dest </> takeFileName f } ]
+
+importTasks dest (ZipFile f) = withArchive f $ do
+  entries <- liftM (filter isMedia) entryNames
+  forM entries $ \x ->
+    return ImportTask { taskName = x
+                      , runTask = withArchive f $ extractFiles [x] dest
+                      }
+
 --------------------------------------------------------------------------------
 -- Common types
 
@@ -170,50 +184,17 @@ data ImportTask = ImportTask
                   { taskName :: String
                   , runTask  :: IO () }
 
-
--- | Represents things that can be imported into iTunes.
-class Importable a where
-  -- | Add the given media to the iTunes library.
-  importTasks :: FilePath -> a -> IO [ImportTask]
-
--- | Encapsulates an importable item.
-data ImportItem = ImportItem Importable
+data Importable = MediaFile FilePath
+                | ZipFile FilePath
 
 --------------------------------------------------------------------------------
--- Media files
-
-newtype MediaFile = MediaFile FilePath
 
 -- | True if the given file can be imported by iTunes.
 isMedia :: FilePath -> Bool
 isMedia p = takeExtension p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
-
-instance Importable MediaFile where
-  importTasks dest (MediaFile f) =
-    return [ ImportTask { taskName = takeFileName f
-                         , runTask = copyFile f $ dest </> takeFileName f } ]
-
---------------------------------------------------------------------------------
--- Zip files
-
-newtype ZipFile = ZipFile FilePath
 
 -- | Read file header to test whether the given path points to a zip archive.
 isZipFile :: FilePath -> IO Bool
 isZipFile p = do
   header <- liftM (L8.unpack . L8.take 2) (L8.readFile p)
   return $ header == "PK"
-
--- | Construct a ZipFile instance from the given file if it is a zip file.
-asZipFile :: FilePath -> IO (Maybe ZipFile)
-asZipFile p = do
-  isZip <- isZipFile p
-  return $ if isZip then Just (ZipFile p) else Nothing
-
-instance Importable ZipFile where
-  importTasks dest (ZipFile f) = withArchive f $ do
-    entries <- liftM (filter isMedia) entryNames
-    forM entries $ \x ->
-      return ImportTask { taskName = x
-                        , runTask = withArchive f $ extractFiles [x] dest
-                        }
