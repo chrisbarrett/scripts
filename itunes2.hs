@@ -216,16 +216,12 @@ asZipFile p = do
     True  -> Just $ Zip p
     False -> Nothing
 
-zipMedia :: Zip -> Archive [String]
-zipMedia (Zip z) =
-
 instance Importable Zip where
-  getImports dest z@(Zip f) =
-    withArchive f $ do
-      liftM (filter isMedia) entryNames >>=
-      mapM \x -> { itemName = x
-                , action = \() -> withArchive f $ extractFiles [x] dest
-                }
+  getImports dest z@(Zip f) = withArchive f $ do
+      liftM (filter isMedia) entryNames >>= mapM \x ->
+        { itemName = x
+        , action = \() -> withArchive f $ extractFiles [x] dest
+        }
 
 instance Deleteable Zip where
   delete (Zip z) = removeFile z
