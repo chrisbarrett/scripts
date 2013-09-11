@@ -148,8 +148,7 @@ getYesOrNo deflt = do
 
 -- | Filter the input files for importable items.
 mediaFromPath :: FilePath -> IO [(Maybe FilePath, Importables)]
-mediaFromPath p@(isMedia -> True) =
-  return [ (Just p, Media $ MediaFile p) ]
+mediaFromPath p@(isMedia -> True) = return [ (Just p, Media $ MediaFile p) ]
 
 -- | Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
