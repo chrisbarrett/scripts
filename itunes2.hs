@@ -158,6 +158,11 @@ getFilesInTree d = do
     (_, True) -> return [d]
     _         -> return []
 
+
+-- | True if the given file can be imported by iTunes.
+isMedia :: FilePath -> Bool
+isMedia p = takeExtension p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
+
 --------------------------------------------------------------------------------
 -- Type classes
 
@@ -190,10 +195,6 @@ instance Importable MediaFile where
 
 instance Deleteable MediaFile where
   delete (MediaFile f) = removeFile f
-
--- | True if the given file can be imported by iTunes.
-isMedia :: FilePath -> Bool
-isMedia p = takeExtension p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
 
 --------------------------------------------------------------------------------
 -- Zip files
