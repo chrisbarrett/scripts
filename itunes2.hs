@@ -142,7 +142,7 @@ getYesOrNo deflt = do
 -- | Represents things that can be imported into iTunes.
 class Importable a where
   -- | Add the given media to the iTunes library.
-  runImport :: FilePath -> a -> IO ()
+  runImport :: Describable a => FilePath -> a -> IO ()
 
 -- | Represents things that can be described in the UI.
 class Describable a where
