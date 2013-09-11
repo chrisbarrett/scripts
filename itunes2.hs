@@ -165,7 +165,7 @@ getFilesInTree d = do
 -- | Associates an item to import with a label for UI feedback.
 data ImportTask = ImportTask
                   { itemName :: String
-                  , action :: IO () }
+                  , action   :: IO () }
 
 -- | Represents things that can be imported into iTunes.
 class Importable a where
@@ -219,9 +219,9 @@ asZipFile p = do
 instance Importable Zip where
   getImports dest z@(Zip f) = withArchive f $ do
       liftM (filter isMedia) entryNames >>= mapM $ \x ->
-        { itemName = x
-        , action = \() -> withArchive f $ extractFiles [x] dest
-        }
+        return { itemName = x
+               , action = \() -> withArchive f $ extractFiles [x] dest
+               }
 
 instance Deleteable Zip where
   delete (Zip z) = removeFile z
