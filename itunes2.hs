@@ -113,7 +113,7 @@ execute (Add args)    = do
     -- | Import each media item into iTunes.
     importMedia :: Importable -> IO ()
     importMedia x =
-      liftM importTasks itunesImportFolder >>= mapM $ \t ->
+      liftM importTasks itunesImportFolder x >>= mapM $ \t ->
         runTask t
         putDoc $ green (text "  A ") <+> text (taskName t)  <> linebreak
 
