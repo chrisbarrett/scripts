@@ -201,7 +201,6 @@ instance Deleteable Zip where
 filterImportable :: Importable a => [FilePath] -> IO [a]
 filterImportable xs = do
 
-
 -- | Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
 getFilesInTree d | takeFileName d `elem` [".", ".."] = return []
