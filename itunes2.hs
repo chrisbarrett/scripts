@@ -104,7 +104,7 @@ execute (Add args)    = do
                           /> "Automatically Add to iTunes.localized"
 
     -- | Import each media item into iTumes.
-    importMedia :: Importable a => [a] -> IO ()
+    importMedia :: (Importable a, Describable a) => [a] -> IO ()
     importMedia = mapM_ $ \x -> do
       dest <- itunesImportFolder
       runImport dest x
