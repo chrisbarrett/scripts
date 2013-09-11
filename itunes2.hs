@@ -65,7 +65,7 @@ execute (Add args)    = do
   warnWhereNotExists paths
   media <- liftM concat $ mapM mediaFromPath paths
   when (null media) $ putStrLn "No media found." >> exitFailure
-  mapM_ addToItunes media
+  importMedia media
   promptDeleteOriginals media
 
   where
@@ -103,6 +103,11 @@ execute (Add args)    = do
         removeFile p
         putDoc $ red (text "  D ") <+> text p <> linebreak
 
+    importMedia :: Importable a => [a] -> IO ()
+    importMedia = mapM $ \x -> do
+      runImport x
+      putDoc $ green (text "  A ") <+> text (describe x)  <> linebreak
+
 
 -- | Concatenate a monadic filepath with pure filepaths.
 (/>) :: IO FilePath -> FilePath -> IO FilePath
@@ -111,7 +116,9 @@ infix 4 />
 
 -- | The path to the iTunes library in the user's home folder.
 itunesMedia :: IO FilePath
-itunesMedia = getHomeDirectory /> "Music" </> "iTunes" </> "iTunes Media"
+itunesMedia = getHomeDirectory /> "Music"
+              </> "iTunes" </> "iTunes Media"
+              /> "Automatically Add to iTunes.localized"
 
 -- | Test whether the given file or directory exists.
 fileOrDirectoryExists :: FilePath -> IO Bool
@@ -139,7 +146,7 @@ getYesOrNo deflt = do
 -- | Represents things that can be imported into iTunes.
 class Importable a where
   -- | Add the given media to the iTunes library.
-  addToItunes :: a -> IO ()
+  runImport :: FilePath -> a -> IO ()
   -- | String representation of the given item, for feedback in the UI.
   describe :: a -> String
 
@@ -154,11 +161,9 @@ class Deleteable a where
 newtype MediaFile = MediaFile FilePath
 
 instance Importable MediaFile where
-  describe = show
-  addToItunes file = do
-    dest <- itunesMedia /> "Automatically Add to iTunes.localized" </> takeFileName file
-    copyFile file dest
-    putDoc $ green (text "  A ") <+> text (takeFileName file) <> linebreak
+  describe (MediaFile f) = takeFileName f
+  runImport dest (MediaFile f) = do
+    copyFile f $ dest </> takeFileName f
 
 -- | True if the given file can be imported by iTunes.
 isMedia :: FilePath -> Bool
@@ -189,12 +194,14 @@ asZipFile p = do
 
 instance Importable Zip where
   describe = show
-  addToItunes z =
+  runImport z =
 
 --------------------------------------------------------------------------------
 
--- | Filter the input files for addable items.
-filterMedia :: Importable a => [FilePath] -> IO [a]
+-- | Filter the input files for importable items.
+filterImportable :: Importable a => [FilePath] -> IO [a]
+filterImportable xs = do
+
 
 -- | Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
