@@ -158,7 +158,7 @@ mediaFromPath p = do
   case (isDir, isZip) of
     (True, _) -> liftM concat $ getFilesInTree p >>= mapM mediaFromPath
     (_, True) -> return [ (p, ZipFile p)  ]
-    otherwise -> return []
+    _         -> return []
 
 
 -- | Walk the directory tree to find all files below a given path.
