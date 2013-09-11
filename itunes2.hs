@@ -204,7 +204,7 @@ instance Deleteable Zip where
 --------------------------------------------------------------------------------
 
 -- | Filter the input files for importable items.
-mediaFromPath :: Importable a, Describable a, Deleteable a => FilePath -> IO [a]
+mediaFromPath :: forall a . Importable a, Describable a, Deleteable a => FilePath -> IO [a]
 mediaFromPath p = undefined
 
 -- | Walk the directory tree to find all files below a given path.
