@@ -147,10 +147,7 @@ getYesOrNo deflt = do
 
 -- | Filter the input files for importable items.
 mediaFromPath :: FilePath -> IO [(Maybe FilePath, ImportTask)]
-mediaFromPath p@(isMedia -> True) = return (Just p, MediaFile p)
-
-mediaFromPath p = do
-  zip <- asZipFile p
+mediaFromPath p@(isMedia -> True) = return [(Just p, MediaFile p)]
 
 -- | Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
