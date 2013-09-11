@@ -108,11 +108,13 @@ execute (Add args)    = do
                           /> "Automatically Add to iTunes.localized"
 
     -- | Import each media item into iTumes.
-    importMedia :: (Importable a, Describable a) => [a] -> IO ()
+    importMedia :: [ImportTask] -> IO ()
     importMedia = mapM_ $ \x -> do
       dest <- itunesImportFolder
-      runImport dest x
-      putDoc $ green (text "  A ") <+> text (describe x)  <> linebreak
+      tasks <- getImports dest x
+      forM_ tasks $ \t ->
+        runTask t
+        putDoc $ green (text "  A ") <+> text (taskName t)  <> linebreak
 
 
 -- | Concatenate a monadic filepath with pure filepaths.
@@ -164,8 +166,8 @@ getFilesInTree d = do
 
 -- | Associates an item to import with a label for UI feedback.
 data ImportTask = ImportTask
-                  { itemName :: String
-                  , action   :: IO () }
+                  { taskName :: String
+                  , runTask  :: IO () }
 
 -- | Represents things that can be imported into iTunes.
 class Importable a where
