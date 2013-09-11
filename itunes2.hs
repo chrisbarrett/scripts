@@ -25,6 +25,7 @@ import           Control.Exception
 import           Control.Monad
 import qualified Data.ByteString.Lazy.Char8   as L8
 import           Data.Char                    (toLower)
+import qualified Data.Conduit.Binary          as CB
 import           Prelude                      hiding (catch)
 import           System.Directory
 import           System.Environment           (getArgs)
@@ -67,8 +68,10 @@ execute (Add args)    = do
   unless itunesExists $ putStrLn "Cannot find iTunes Media folder" >> exitFailure
   paths <- pathsFromArgs
   warnWhereNotExists paths
-  media <- liftM concat $ mapM mediaFromPath paths
-  when (null media) $ putStrLn "No media found." >> exitFailure
+  xs <- liftM concat $ mapM mediaFromPath paths
+  when (null xs) $ putStrLn "No media found." >> exitFailure
+  let files = map snd xs
+      media = map fst xs
   importMedia media
   promptDeleteOriginals media
 
@@ -216,7 +219,7 @@ asZipFile p = do
 
 instance Importable Zip where
   importTasks dest z@(Zip f) = withArchive f $ do
-      liftM (filter isMedia) entryNames >>= mapM $ \x ->
+    entryNames >>= liftM ( filter isMedia ) >>= mapM $ \x ->
         return { taskName = x
                , runTask = \() -> withArchive f $ extractFiles [x] dest
                }
