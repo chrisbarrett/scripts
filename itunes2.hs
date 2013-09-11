@@ -226,7 +226,7 @@ instance Describable Zip where
   describe (Zip z) = show z
 
 instance Importable Zip where
-  runImport dest z@(Zip f) = do
+  runImport dest z@(Zip f) =
     withArchive f $ do
       media <- zipMedia z
       extractFiles media dest
