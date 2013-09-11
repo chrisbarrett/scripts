@@ -165,22 +165,15 @@ getFilesInTree d = do
 -- Common types
 
 -- | Associates an item to import with a label for UI feedback.
-data Task = Task
-            { taskName :: String
-            , runTask  :: IO () }
+data ImportTask = ImportTask
+                  { taskName :: String
+                  , runTask  :: IO () }
 
-newtype ImportTask = ImportTask Task
-newtype DeletionTask = DeletionTask Task
 
 -- | Represents things that can be imported into iTunes.
 class Importable a where
   -- | Add the given media to the iTunes library.
   importTasks :: FilePath -> a -> IO [ImportTask]
-
--- | Represents things that can be deleted.
-class Deleteable a where
-  -- | Delete the given item.
-  deletionTask :: a -> IO DeletionTask
 
 --------------------------------------------------------------------------------
 -- Media files
@@ -201,9 +194,6 @@ instance Importable MediaFile where
     return { taskName = takeFileName f
            , runTask = copyFile f $ dest </> takeFileName f
            }
-
-instance Deleteable MediaFile where
-  delete (MediaFile f) = removeFile f
 
 --------------------------------------------------------------------------------
 -- Zip files
@@ -230,6 +220,3 @@ instance Importable Zip where
         return { taskName = x
                , runTask = \() -> withArchive f $ extractFiles [x] dest
                }
-
-instance Deleteable Zip where
-  delete (Zip z) = removeFile z
