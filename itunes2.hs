@@ -188,7 +188,7 @@ asZipFile p = do
     False -> Nothing
 
 instance Importable Zip where
-  describe = show
+  describe (Zip f) = show f
   runImport z = undefined
 
 instance Deleteable Zip where
