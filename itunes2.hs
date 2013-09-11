@@ -70,10 +70,11 @@ execute (Add args)    = do
   warnWhereNotExists paths
   xs <- liftM concat $ mapM mediaFromPath paths
   when (null xs) $ putStrLn "No media found." >> exitFailure
-  let files = map snd xs
-      media = map fst xs
+
+  let files = map fst xs
+      media = map snd xs
   importMedia media
-  promptDeleteOriginals media
+  promptDeleteOriginals files
 
   where
     -- | Extract targets to be imported from program arguments.
