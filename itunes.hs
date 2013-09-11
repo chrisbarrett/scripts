@@ -40,12 +40,13 @@ data Args = Add [FilePath] | Help | Invalid | Unknown String
 
 --- Enumerates the different media form that will be added to iTunes.
 data MediaType = File FilePath
-               | Stream L8.ByteString Name
+               | Stream L8.ByteString Name (Maybe ArchivePath)
 type Name = String
+type ArchivePath = FilePath
 
 --- Enumerates different filetypes that need to be handled when searching for media.
 data FileType = Media MediaType
-              | Zip FilePath
+              | Zip ArchivePath
               | Unsupported
 
 main :: IO ()
@@ -100,11 +101,14 @@ execute (Add args)    = do
       putStrLn $ "Delete original " ++ pluralize n "item" ++ "? (y/n) [n] "
       shouldDelete <- getYesOrNo False
       when shouldDelete $ do
-        forM_ files $ \x -> do
-          removeFile x
-          putDoc $ red (text "  D ") <+> text x <> linebreak
-
+        forM_ files deleteMedia
         putStrLn $ "Deleted " ++ show n ++ " " ++ pluralize n "item" ++ "."
+
+    deleteMedia :: MediaType -> IO ()
+    deleteMedia (File path) = do
+      removeFile path
+      putDoc $ red (text "  D ") <+> text path <> linebreak
+    deleteMedia (Stream _ _ (Just archive)) = undefined
 
 --- Concatenate a monadic filepath with pure filepaths.
 (/>) :: IO FilePath -> FilePath -> IO FilePath
