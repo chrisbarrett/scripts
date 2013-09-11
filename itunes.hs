@@ -143,7 +143,7 @@ mediaFromPath path = do
 
 --- Inspect the given file and determine whether it is an actionable type.
 categoriseType :: FilePath -> IO FileType
-categoriseType p@(isMedia -> True) = return (Media p)
+categoriseType p@(isMedia -> True) = return (Media (File p))
 categoriseType p = do
   -- Read magic string from file header to determine type.
   bs <- liftM (L8.unpack . L8.take 2) (L8.readFile p)
