@@ -97,8 +97,8 @@ execute (Add args)    = do
       shouldDelete <- getYesOrNo False
       when shouldDelete $ do
         forM_ xs $ \x -> do
-          delete x
-          putDoc $ red (text "  D ") <+> text (describe x) <> linebreak
+          removeFile x
+          putDoc $ red (text "  D ") <+> text x <> linebreak
 
         putStrLn $ "Deleted " ++ show n ++ " " ++ pluralize n "item" ++ "."
 
