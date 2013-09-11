@@ -177,7 +177,7 @@ class Importable a where
   importTasks :: FilePath -> a -> IO [ImportTask]
 
 -- | Encapsulates an importable item.
-newtype Importable a => ImportItem a = ImportItem a
+data ImportItem = Importable a => ImportItem a
 
 --------------------------------------------------------------------------------
 -- Media files
