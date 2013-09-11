@@ -33,6 +33,9 @@ import           System.IO.Temp
 import           Text.PrettyPrint.ANSI.Leijen (dullyellow, green, linebreak,
                                                putDoc, red, text, (<+>), (<>))
 
+--------------------------------------------------------------------------------
+-- Main program
+
 -- | Enumerates the possible parsed values of the program arguments.
 data Args = Add [FilePath] | Help | Invalid | Unknown String
           deriving Show
