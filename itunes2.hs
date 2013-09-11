@@ -25,14 +25,12 @@ import           Control.Exception
 import           Control.Monad
 import qualified Data.ByteString.Lazy.Char8   as L8
 import           Data.Char                    (toLower)
-import qualified Data.Conduit.Binary          as CB
 import           Data.Maybe                   (fromJust, isJust)
 import           Prelude                      hiding (catch)
 import           System.Directory
 import           System.Environment           (getArgs)
 import           System.Exit                  (exitFailure)
 import           System.FilePath.Posix
-import           System.IO.Temp
 import           Text.PrettyPrint.ANSI.Leijen (dullyellow, green, linebreak,
                                                putDoc, red, text, (<+>), (<>))
 
