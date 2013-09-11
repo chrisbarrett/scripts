@@ -152,7 +152,7 @@ categoriseType p = do
     _    -> Unsupported
 
 --- Map the given file to its media items. Search archives for media.
-selectMedia :: FileType -> IO [FilePath]
+selectMedia :: FileType -> IO [MediaType]
 selectMedia (Media m)   = return [m]
 selectMedia Unsupported = return []
 selectMedia (Zip z)     = do
