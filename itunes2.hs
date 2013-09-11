@@ -195,8 +195,8 @@ asMediaFile _ = return Nothing
 
 instance Importable MediaFile where
   getImports dest (MediaFile f) =
-    return { itemName = takeFileName f
-           , action = copyFile f $ dest </> takeFileName f
+    return { taskName = takeFileName f
+           , runTask = copyFile f $ dest </> takeFileName f
            }
 
 instance Deleteable MediaFile where
@@ -224,8 +224,8 @@ asZipFile p = do
 instance Importable Zip where
   getImports dest z@(Zip f) = withArchive f $ do
       liftM (filter isMedia) entryNames >>= mapM $ \x ->
-        return { itemName = x
-               , action = \() -> withArchive f $ extractFiles [x] dest
+        return { taskName = x
+               , runTask = \() -> withArchive f $ extractFiles [x] dest
                }
 
 instance Deleteable Zip where
