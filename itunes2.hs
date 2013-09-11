@@ -218,7 +218,7 @@ asZipFile p = do
 
 instance Importable Zip where
   getImports dest z@(Zip f) = withArchive f $ do
-      liftM (filter isMedia) entryNames >>= mapM \x ->
+      liftM (filter isMedia) entryNames >>= mapM $ \x ->
         { itemName = x
         , action = \() -> withArchive f $ extractFiles [x] dest
         }
