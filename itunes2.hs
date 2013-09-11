@@ -147,7 +147,10 @@ getYesOrNo deflt = do
 
 -- | Filter the input files for importable items.
 mediaFromPath :: FilePath -> IO [(Maybe FilePath, ImportTask)]
-mediaFromPath p = undefined
+mediaFromPath p@(isMedia -> True) = return (Just p, MediaFile p)
+
+mediaFromPath p = do
+  zip <- asZipFile p
 
 -- | Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
@@ -182,11 +185,6 @@ newtype MediaFile = MediaFile FilePath
 -- | True if the given file can be imported by iTunes.
 isMedia :: FilePath -> Bool
 isMedia p = takeExtension p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
-
--- | Construct a MediaFile instance from the given file if it is importable.
-asMediaFile :: FilePath -> IO (Maybe MediaFile)
-asMediaFile p@(isMedia -> True) = return $ Just $ MediaFile p
-asMediaFile _ = return Nothing
 
 instance Importable MediaFile where
   importTasks dest (MediaFile f) =
