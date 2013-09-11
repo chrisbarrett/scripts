@@ -59,7 +59,7 @@ execute Help          = putStrLn "itunes: Commands for working with iTunes" >> s
 execute Invalid       = putStrLn "Invalid usage." >> showUsage >> exitFailure
 execute (Unknown cmd) = putStrLn ("Unrecognised command: " ++ cmd) >> showUsage >> exitFailure
 execute (Add args)    = do
-  itunesExists <- itunesMedia >>= doesDirectoryExist
+  itunesExists <- itunesImportFolder >>= doesDirectoryExist
   unless itunesExists $ putStrLn "Cannot find iTunes Media folder" >> exitFailure
   paths <- pathsFromArgs
   warnWhereNotExists paths
