@@ -38,8 +38,13 @@ import           Text.PrettyPrint.ANSI.Leijen (dullyellow, green, linebreak,
 data Args = Add [FilePath] | Help | Invalid | Unknown String
           deriving Show
 
+--- Enumerates the different media form that will be added to iTunes.
+data MediaType = File FilePath | Stream L8.ByteString Name
+type Name = String
 --- Enumerates different filetypes that need to be handled when searching for media.
-data FileType = Media FilePath | Zip FilePath | Unsupported
+data FileType = Media MediaType
+              | Zip FilePath
+              | Unsupported
 
 main :: IO ()
 main = getArgs >>= execute . parseArgs
@@ -87,6 +92,7 @@ execute (Add args)    = do
                     <> linebreak)
           notExists
 
+    promptDeleteOriginals :: [MediaType] -> IO ()
     promptDeleteOriginals files = do
       let n = length files
       putStrLn $ "Delete original " ++ pluralize n "item" ++ "? (y/n) [n] "
@@ -107,8 +113,8 @@ infix 4 />
 itunesMedia :: IO FilePath
 itunesMedia = getHomeDirectory /> "Music" </> "iTunes" </> "iTunes Media"
 
---- Copy the given file to the iTunes library.
-addToItunes :: FilePath -> IO ()
+--- Add the given media to the iTunes library.
+addToItunes :: MediaType -> IO ()
 addToItunes file = do
   dest <- itunesMedia /> "Automatically Add to iTunes.localized" </> takeFileName file
   copyFile file dest
@@ -121,7 +127,7 @@ isMedia path = takeExtension path `elem` [".m4a", ".m4v", ".mov",
                                      ".aac", ".aiff"]
 
 --- Search for media files under the given filepath.
-mediaFromPath :: FilePath -> IO [FilePath]
+mediaFromPath :: FilePath -> IO [MediaType]
 mediaFromPath path = do
   exists <- fileOrDirectoryExists path
   if exists
