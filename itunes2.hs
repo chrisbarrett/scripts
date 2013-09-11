@@ -171,7 +171,8 @@ asZipFile p = do
 
 instance Importable Zip where
   describe = show
-  addToItunes
+  addToItunes z =
+
 
 
 
@@ -179,6 +180,8 @@ instance Importable Zip where
 isMedia :: FilePath -> Bool
 isMedia p = p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
 
+-- | Filter the input files for addable items.
+filterMedia :: Importable a => [FilePath] -> IO [a]
 
 -- | Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
