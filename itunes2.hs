@@ -105,7 +105,7 @@ execute (Add args)    = do
 
     -- | Import each media item into iTumes.
     importMedia :: Importable a => [a] -> IO ()
-    importMedia = mapM $ \x -> do
+    importMedia = mapM_ $ \x -> do
       dest <- itunesImportFolder
       runImport dest x
       putDoc $ green (text "  A ") <+> text (describe x)  <> linebreak
