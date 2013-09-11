@@ -86,7 +86,7 @@ execute (Add args)    = do
           notExists
 
     -- | Prompt the user whether to delete the original items after importing.
-    promptDeleteOriginals :: ( Deleteable a, Describable a) => [a] -> IO ()
+    promptDeleteOriginals :: (Deleteable a, Describable a) => [a] -> IO ()
     promptDeleteOriginals xs = do
       let n = length xs
       putStrLn $ "Delete original " ++ pluralize n "item" ++ "? (y/n) [n] "
@@ -204,7 +204,7 @@ instance Deleteable Zip where
 --------------------------------------------------------------------------------
 
 -- | Filter the input files for importable items.
-mediaFromPath :: ( Importable a, Describable a, Deleteable a ) => FilePath -> IO [a]
+mediaFromPath :: (Importable a, Describable a, Deleteable a) => FilePath -> IO [a]
 mediaFromPath p = undefined
 
 -- | Walk the directory tree to find all files below a given path.
