@@ -111,13 +111,11 @@ execute (Add args)    = do
                           /> "Automatically Add to iTunes.localized"
 
     -- | Import each media item into iTunes.
-    importMedia :: Importables -> IO ()
-    importMedia (Media ) = do
-
-    runImport :: Task -> IO ()
-    runImport t = do
-      runTask t
-      putDoc $ green (text "  A ") <+> text (taskName t)  <> linebreak
+    importMedia :: ImportItem -> IO ()
+    importMedia x =
+      liftM importTasks itunesImportFolder >>= mapM $ \t ->
+        runTask t
+        putDoc $ green (text "  A ") <+> text (taskName t)  <> linebreak
 
 
 -- | Concatenate a monadic filepath with pure filepaths.
