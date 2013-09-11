@@ -37,49 +37,6 @@ import           Text.PrettyPrint.ANSI.Leijen (dullyellow, green, linebreak,
 data Args = Add [FilePath] | Help | Invalid | Unknown String
           deriving Show
 
-
--- | Represents things that can be imported into iTunes.
-class Importable m where
-  -- | Add the given media to the iTunes library.
-  addToItunes :: m -> IO ()
-  -- | String representation of the given item, for feedback in the UI.
-  describe :: m -> String
-
---------------------------------------------------------------------------------
--- Media files
-
-newtype MediaFile = MediaFile FilePath
-
-instance Importable MediaFile where
-  describe = show
-  addToItunes file = do
-    dest <- itunesMedia /> "Automatically Add to iTunes.localized" </> takeFileName file
-    copyFile file dest
-    putDoc $ green (text "  A ") <+> text (takeFileName file) <> linebreak
-
---------------------------------------------------------------------------------
--- Zip files
-
-newtype Zip = Zip FilePath
-
--- | Construct a Zip instance from the given file if it is a zip file.
-asZipFile :: FilePath -> IO (Maybe Zip)
-asZipFile p = do
-  -- Read magic string from file header to determine type.
-  bs <- liftM (L8.unpack . L8.take 2) (L8.readFile p)
-  return $ case bs of
-    "PK" -> Just $ Zip p
-    _    -> Nothing
-
-instance Importable Zip where
-  describe = show
-  addToItunes
-
-
-
-
-
-
 main :: IO ()
 main = getArgs >>= execute . parseArgs
   where
@@ -147,8 +104,6 @@ execute (Add args)    = do
         putDoc $ red (text "  D ") <+> text p <> linebreak
 
 
-
-
 -- | Concatenate a monadic filepath with pure filepaths.
 (/>) :: IO FilePath -> FilePath -> IO FilePath
 io /> p = (</>) <$> io <*> pure p
@@ -157,22 +112,6 @@ infix 4 />
 -- | The path to the iTunes library in the user's home folder.
 itunesMedia :: IO FilePath
 itunesMedia = getHomeDirectory /> "Music" </> "iTunes" </> "iTunes Media"
-
--- | True if the given file can be imported by iTunes.
-isMedia :: FilePath -> Bool
-isMedia p = p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
-
-
--- | Walk the directory tree to find all files below a given path.
-getFilesInTree :: FilePath -> IO [FilePath]
-getFilesInTree d | takeFileName d `elem` [".", ".."] = return []
-getFilesInTree d = do
-  isDir <- doesDirectoryExist d
-  isFile <- doesFileExist d
-  case (isDir, isFile) of
-    (True, _) -> concat <$> (getDirectoryContents d >>= mapM (getFilesInTree . (</>) d))
-    (_, True) -> return [d]
-    _         -> return []
 
 -- | Test whether the given file or directory exists.
 fileOrDirectoryExists :: FilePath -> IO Bool
@@ -194,3 +133,60 @@ getYesOrNo deflt = do
     'n'  -> return False
     '\n' -> return deflt
     _    -> getYesOrNo deflt
+
+--------------------------------------------------------------------------------
+
+-- | Represents things that can be imported into iTunes.
+class Importable m where
+  -- | Add the given media to the iTunes library.
+  addToItunes :: m -> IO ()
+  -- | String representation of the given item, for feedback in the UI.
+  describe :: m -> String
+
+--------------------------------------------------------------------------------
+-- Media files
+
+newtype MediaFile = MediaFile FilePath
+
+instance Importable MediaFile where
+  describe = show
+  addToItunes file = do
+    dest <- itunesMedia /> "Automatically Add to iTunes.localized" </> takeFileName file
+    copyFile file dest
+    putDoc $ green (text "  A ") <+> text (takeFileName file) <> linebreak
+
+--------------------------------------------------------------------------------
+-- Zip files
+
+newtype Zip = Zip FilePath
+
+-- | Construct a Zip instance from the given file if it is a zip file.
+asZipFile :: FilePath -> IO (Maybe Zip)
+asZipFile p = do
+  -- Read magic string from file header to determine type.
+  bs <- liftM (L8.unpack . L8.take 2) (L8.readFile p)
+  return $ case bs of
+    "PK" -> Just $ Zip p
+    _    -> Nothing
+
+instance Importable Zip where
+  describe = show
+  addToItunes
+
+
+
+-- | True if the given file can be imported by iTunes.
+isMedia :: FilePath -> Bool
+isMedia p = p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
+
+
+-- | Walk the directory tree to find all files below a given path.
+getFilesInTree :: FilePath -> IO [FilePath]
+getFilesInTree d | takeFileName d `elem` [".", ".."] = return []
+getFilesInTree d = do
+  isDir <- doesDirectoryExist d
+  isFile <- doesFileExist d
+  case (isDir, isFile) of
+    (True, _) -> concat <$> (getDirectoryContents d >>= mapM (getFilesInTree . (</>) d))
+    (_, True) -> return [d]
+    _         -> return []
