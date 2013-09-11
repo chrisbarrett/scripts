@@ -175,7 +175,9 @@ newtype Zip = Zip FilePath
 
 -- | Read file header to test whether the given path points to a zip archive.
 isZipFile :: FilePath -> IO Bool
-isZipFile p = liftM (((==) "PK") . L8.unpack . L8.take 2) (L8.readFile p)
+isZipFile p = do
+  header <- liftM (L8.unpack . L8.take 2) (L8.readFile p)
+  return $ header == "PK"
 
 -- | Construct a Zip instance from the given file if it is a zip file.
 asZipFile :: FilePath -> IO (Maybe Zip)
