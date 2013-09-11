@@ -115,10 +115,11 @@ itunesMedia = getHomeDirectory /> "Music" </> "iTunes" </> "iTunes Media"
 
 --- Add the given media to the iTunes library.
 addToItunes :: MediaType -> IO ()
-addToItunes file = do
+addToItunes (File file) = do
   dest <- itunesMedia /> "Automatically Add to iTunes.localized" </> takeFileName file
   copyFile file dest
   putDoc $ green (text "  A ") <+> text (takeFileName file) <> linebreak
+addToItunes (Stream bs) = undefined
 
 --- Valid media extensions
 isMedia :: FilePath -> Bool
