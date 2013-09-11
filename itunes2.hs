@@ -73,7 +73,7 @@ execute (Add args)    = do
 
   let files = map fromJust $ filter isJust $ map fst xs
       media = map snd xs
-  importMedia media
+  mapM importMedia media
   promptDeleteOriginals files
 
   where
@@ -111,8 +111,11 @@ execute (Add args)    = do
                           /> "Automatically Add to iTunes.localized"
 
     -- | Import each media item into iTunes.
-    importMedia :: [ImportTask] -> IO ()
-    importMedia tasks = forM_ tasks $ \t -> do
+    importMedia :: Importables -> IO ()
+    importMedia (Media ) = do
+
+    runImport :: Task -> IO ()
+    runImport t = do
       runTask t
       putDoc $ green (text "  A ") <+> text (taskName t)  <> linebreak
 
@@ -147,8 +150,8 @@ getYesOrNo deflt = do
 -- Filesystem utilities
 
 -- | Filter the input files for importable items.
-mediaFromPath :: FilePath -> IO [(Maybe FilePath, Importables)]
-mediaFromPath p@(isMedia -> True) = return [ (Just p, Media $ MediaFile p) ]
+mediaFromPath :: FilePath -> IO [(Maybe FilePath, ImportItem)]
+mediaFromPath p@(isMedia -> True) = return [ (Just p, ImportItem $ MediaFile p) ]
 
 -- | Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
@@ -175,7 +178,8 @@ class Importable a where
   -- | Add the given media to the iTunes library.
   importTasks :: FilePath -> a -> IO [ImportTask]
 
-data Importables = Media MediaFile | Zip ZipFile
+-- | Encapsulates an importable item.
+newtype Importable a => ImportItem = ImportItem a
 
 --------------------------------------------------------------------------------
 -- Media files
