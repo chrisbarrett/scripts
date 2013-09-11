@@ -1,4 +1,5 @@
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TupleSections       #-}
 {-# LANGUAGE ViewPatterns        #-}
 {-
 
@@ -146,8 +147,9 @@ getYesOrNo deflt = do
 -- Filesystem utilities
 
 -- | Filter the input files for importable items.
-mediaFromPath :: FilePath -> IO [(Maybe FilePath, ImportTask)]
-mediaFromPath p@(isMedia -> True) = return [(Just p, MediaFile p)]
+mediaFromPath :: FilePath -> IO [(Maybe FilePath, Importables)]
+mediaFromPath p@(isMedia -> True) =
+  return [ (Just p, Media $ MediaFile p) ]
 
 -- | Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
@@ -174,6 +176,8 @@ class Importable a where
   -- | Add the given media to the iTunes library.
   importTasks :: FilePath -> a -> IO [ImportTask]
 
+data Importables = Media MediaFile | Zip ZipFile
+
 --------------------------------------------------------------------------------
 -- Media files
 
@@ -191,7 +195,7 @@ instance Importable MediaFile where
 --------------------------------------------------------------------------------
 -- Zip files
 
-newtype Zip = Zip FilePath
+newtype ZipFile = ZipFile FilePath
 
 -- | Read file header to test whether the given path points to a zip archive.
 isZipFile :: FilePath -> IO Bool
@@ -199,14 +203,14 @@ isZipFile p = do
   header <- liftM (L8.unpack . L8.take 2) (L8.readFile p)
   return $ header == "PK"
 
--- | Construct a Zip instance from the given file if it is a zip file.
-asZipFile :: FilePath -> IO (Maybe Zip)
+-- | Construct a ZipFile instance from the given file if it is a zip file.
+asZipFile :: FilePath -> IO (Maybe ZipFile)
 asZipFile p = do
   isZip <- isZipFile p
-  return $ if isZip then Just (Zip p) else Nothing
+  return $ if isZip then Just (ZipFile p) else Nothing
 
-instance Importable Zip where
-  importTasks dest (Zip f) = withArchive f $ do
+instance Importable ZipFile where
+  importTasks dest (ZipFile f) = withArchive f $ do
     entries <- liftM (filter isMedia) entryNames
     forM entries $ \x ->
       return ImportTask { taskName = x
