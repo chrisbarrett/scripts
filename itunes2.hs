@@ -190,10 +190,10 @@ asMediaFile p@(isMedia -> True) = return $ Just $ MediaFile p
 asMediaFile _ = return Nothing
 
 instance Importable MediaFile where
-  getImports dest (MediaFile f) =
-    return { taskName = takeFileName f
-           , runTask = copyFile f $ dest </> takeFileName f
-           }
+  importTasks dest (MediaFile f) =
+    { taskName = takeFileName f
+    , runTask = copyFile f $ dest </> takeFileName f
+    }
 
 --------------------------------------------------------------------------------
 -- Zip files
@@ -215,7 +215,7 @@ asZipFile p = do
     False -> Nothing
 
 instance Importable Zip where
-  getImports dest z@(Zip f) = withArchive f $ do
+  importTasks dest z@(Zip f) = withArchive f $ do
       liftM (filter isMedia) entryNames >>= mapM $ \x ->
         return { taskName = x
                , runTask = \() -> withArchive f $ extractFiles [x] dest
