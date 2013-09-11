@@ -69,10 +69,12 @@ execute (Add args)    = do
   promptDeleteOriginals media
 
   where
+    -- | Extract targets to be imported from program arguments.
     pathsFromArgs =
       forM args $ \path ->
         canonicalizePath path `catch` (\(_::IOException) -> return path)
 
+    -- | Warn when trying to import items that do not exist on the filesystem.
     warnWhereNotExists paths = do
       notExists <- filterM (liftM not . fileOrDirectoryExists) paths
       unless (null notExists) $ do
@@ -83,29 +85,29 @@ execute (Add args)    = do
                     <> linebreak)
           notExists
 
-    promptDeleteOriginals :: [MediaType] -> IO ()
-    promptDeleteOriginals files = do
-      let n = length files
+    -- | Prompt the user whether to delete the original items after importing.
+    promptDeleteOriginals :: Deleteable a => [a] -> IO ()
+    promptDeleteOriginals xs = do
+      let n = length xs
       putStrLn $ "Delete original " ++ pluralize n "item" ++ "? (y/n) [n] "
       shouldDelete <- getYesOrNo False
       when shouldDelete $ do
-        forM_ files deleteMedia
+        forM_ xs $ \x -> do
+          delete x
+          putDoc $ red (text "  D ") <+> text (describe x) <> linebreak
+
         putStrLn $ "Deleted " ++ show n ++ " " ++ pluralize n "item" ++ "."
 
-    deleteMedia :: MediaType -> IO ()
-    deleteMedia (Stream _ _ (Just archive)) = rm archive
-    deleteMedia (File path)                 = rm path
+    -- | The path to the iTunes import folder.
+    itunesImportFolder :: IO FilePath
+    itunesImportFolder  = getHomeDirectory /> "Music" </> "iTunes" </> "iTunes Media"
+                          /> "Automatically Add to iTunes.localized"
 
-    rm :: FilePath -> IO ()
-    rm p = do
-      exists <- doesFileExist p
-      when exists $ do
-        removeFile p
-        putDoc $ red (text "  D ") <+> text p <> linebreak
-
+    -- | Import each media item into iTumes.
     importMedia :: Importable a => [a] -> IO ()
     importMedia = mapM $ \x -> do
-      runImport x
+      dest <- itunesImportFolder
+      runImport dest x
       putDoc $ green (text "  A ") <+> text (describe x)  <> linebreak
 
 
@@ -114,11 +116,6 @@ execute (Add args)    = do
 io /> p = (</>) <$> io <*> pure p
 infix 4 />
 
--- | The path to the iTunes library in the user's home folder.
-itunesMedia :: IO FilePath
-itunesMedia = getHomeDirectory /> "Music"
-              </> "iTunes" </> "iTunes Media"
-              /> "Automatically Add to iTunes.localized"
 
 -- | Test whether the given file or directory exists.
 fileOrDirectoryExists :: FilePath -> IO Bool
@@ -169,7 +166,6 @@ instance Importable MediaFile where
 isMedia :: FilePath -> Bool
 isMedia p = p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
 
-
 instance Deleteable MediaFile where
   delete (MediaFile f) = removeFile f
 
@@ -194,7 +190,10 @@ asZipFile p = do
 
 instance Importable Zip where
   describe = show
-  runImport z =
+  runImport z = undefined
+
+instance Deleteable Zip where
+  delete (Zip f) = removeFile f
 
 --------------------------------------------------------------------------------
 
