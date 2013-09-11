@@ -70,7 +70,7 @@ execute (Add args)    = do
 
   where
     -- | Extract targets to be imported from program arguments.
-    pathsFromArgs =
+    pathsFromArgs = do
       forM args $ \path ->
         canonicalizePath path `catch` (\(_::IOException) -> return path)
 
