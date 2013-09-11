@@ -146,7 +146,18 @@ getYesOrNo deflt = do
     _    -> getYesOrNo deflt
 
 --------------------------------------------------------------------------------
--- Filesystem utilities
+-- Common types
+
+-- | Associates an item to import with a label for UI feedback.
+data ImportTask = ImportTask
+                  { taskName :: String
+                  , runTask  :: IO () }
+
+data Importable = MediaFile FilePath
+                | ZipFile FilePath
+
+--------------------------------------------------------------------------------
+-- Media parsing
 
 -- | Filter the input files for importable items.
 mediaFromPath :: FilePath -> IO [(FilePath, Importable)]
@@ -184,19 +195,6 @@ importTasks dest (ZipFile f) = withArchive f $ do
     return ImportTask { taskName = x
                       , runTask = withArchive f $ extractFiles [x] dest
                       }
-
---------------------------------------------------------------------------------
--- Common types
-
--- | Associates an item to import with a label for UI feedback.
-data ImportTask = ImportTask
-                  { taskName :: String
-                  , runTask  :: IO () }
-
-data Importable = MediaFile FilePath
-                | ZipFile FilePath
-
---------------------------------------------------------------------------------
 
 -- | True if the given file can be imported by iTunes.
 isMedia :: FilePath -> Bool
