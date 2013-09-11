@@ -119,7 +119,7 @@ execute (Add args)    = do
         putDoc $ green (text "  A ") <+> text (taskName t)  <> linebreak
 
 
--- | Concatenate a monadic filepath with pure filepaths.
+-- | Concatenate a monadic filepath with a pure filepath.
 (/>) :: IO FilePath -> FilePath -> IO FilePath
 io /> p = (</>) <$> io <*> pure p
 infix 4 />
