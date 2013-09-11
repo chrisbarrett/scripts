@@ -159,7 +159,7 @@ class Deleteable a where
 
 newtype MediaFile = MediaFile FilePath
 
-instance Describable a where
+instance Describable MediaFile where
   describe (MediaFile f) = takeFileName f
 
 instance Importable MediaFile where
