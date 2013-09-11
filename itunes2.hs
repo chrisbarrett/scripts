@@ -142,7 +142,7 @@ getYesOrNo deflt = do
 -- | Represents things that can be imported into iTunes.
 class Importable a where
   -- | Add the given media to the iTunes library.
-  runImport :: Describable a => FilePath -> a -> IO ()
+  runImport :: FilePath -> a -> IO ()
 
 -- | Represents things that can be described in the UI.
 class Describable a where
@@ -204,7 +204,7 @@ instance Deleteable Zip where
 --------------------------------------------------------------------------------
 
 -- | Filter the input files for importable items.
-mediaFromPath :: Importable a => FilePath -> IO [a]
+mediaFromPath :: Importable a, Describable a, Deleteable a => FilePath -> IO [a]
 mediaFromPath p = undefined
 
 -- | Walk the directory tree to find all files below a given path.
