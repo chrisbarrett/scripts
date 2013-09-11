@@ -107,7 +107,7 @@ execute (Add args)    = do
     itunesImportFolder  = ( getHomeDirectory /> "Music" </> "iTunes" </> "iTunes Media" )
                           /> "Automatically Add to iTunes.localized"
 
-    -- | Import each media item into iTumes.
+    -- | Import each media item into iTunes.
     importMedia :: [ImportTask] -> IO ()
     importMedia = mapM_ $ \x -> do
       dest <- itunesImportFolder
