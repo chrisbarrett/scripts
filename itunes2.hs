@@ -79,8 +79,7 @@ execute (Add args)    = do
 
   where
     -- | Extract targets to be imported from program arguments.
-    pathsFromArgs = do
-      forM args $ \path ->
+    pathsFromArgs = forM args $ \path ->
         canonicalizePath path `catch` (\(_::IOException) -> return path)
 
     -- | Warn when trying to import items that do not exist on the filesystem.
