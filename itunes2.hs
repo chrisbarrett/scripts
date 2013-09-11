@@ -145,7 +145,7 @@ getYesOrNo deflt = do
 -- Filesystem utilities
 
 -- | Filter the input files for importable items.
-mediaFromPath :: (Importable a, Describable a, Deleteable a) => FilePath -> IO [a]
+mediaFromPath :: (Importable a, Deleteable a) => FilePath -> IO [a]
 mediaFromPath p = undefined
 
 -- | Walk the directory tree to find all files below a given path.
@@ -160,17 +160,17 @@ getFilesInTree d = do
     _         -> return []
 
 --------------------------------------------------------------------------------
--- Type classes
+-- Common types
+
+-- | Associates an item to import with a label for UI feedback.
+data ImportTask = ImportTask
+                  { itemName :: String
+                  , action :: IO () }
 
 -- | Represents things that can be imported into iTunes.
 class Importable a where
   -- | Add the given media to the iTunes library.
-  runImport :: FilePath -> a -> IO ()
-
--- | Represents things that can be described in the UI.
-class Describable a where
-  -- | String representation of the given item.
-  describe :: a -> String
+  getImports :: FilePath -> a -> IO [ImportTask]
 
 -- | Represents things that can be deleted.
 class Deleteable a where
@@ -190,9 +190,6 @@ isMedia p = takeExtension p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mp
 asMediaFile :: FilePath -> IO (Maybe MediaFile)
 asMediaFile p@(isMedia -> True) = return $ Just $ MediaFile p
 asMediaFile _ = return Nothing
-
-instance Describable MediaFile where
-  describe (MediaFile f) = takeFileName f
 
 instance Importable MediaFile where
   runImport dest (MediaFile f) = copyFile f $ dest </> takeFileName f
@@ -220,16 +217,15 @@ asZipFile p = do
     False -> Nothing
 
 zipMedia :: Zip -> Archive [String]
-zipMedia (Zip z) = liftM (filter isMedia) entryNames
-
-instance Describable Zip where
-  describe (Zip z) = show z
+zipMedia (Zip z) =
 
 instance Importable Zip where
-  runImport dest z@(Zip f) =
+  getImports dest z@(Zip f) =
     withArchive f $ do
-      media <- zipMedia z
-      extractFiles media dest
+      liftM (filter isMedia) entryNames >>=
+      mapM \x -> { itemName = x
+                , action = \() -> withArchive f $ extractFiles [x] dest
+                }
 
 instance Deleteable Zip where
   delete (Zip z) = removeFile z
