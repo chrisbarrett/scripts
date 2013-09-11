@@ -141,6 +141,24 @@ getYesOrNo deflt = do
     _    -> getYesOrNo deflt
 
 --------------------------------------------------------------------------------
+-- Filesystem utilities
+
+-- | Filter the input files for importable items.
+mediaFromPath :: (Importable a, Describable a, Deleteable a) => FilePath -> IO [a]
+mediaFromPath p = undefined
+
+-- | Walk the directory tree to find all files below a given path.
+getFilesInTree :: FilePath -> IO [FilePath]
+getFilesInTree d | takeFileName d `elem` [".", ".."] = return []
+getFilesInTree d = do
+  isDir <- doesDirectoryExist d
+  isFile <- doesFileExist d
+  case (isDir, isFile) of
+    (True, _) -> concat <$> (getDirectoryContents d >>= mapM (getFilesInTree . (</>) d))
+    (_, True) -> return [d]
+    _         -> return []
+
+--------------------------------------------------------------------------------
 -- Type classes
 
 -- | Represents things that can be imported into iTunes.
@@ -204,20 +222,3 @@ instance Importable Zip where
 
 instance Deleteable Zip where
   delete (Zip f) = removeFile f
-
---------------------------------------------------------------------------------
-
--- | Filter the input files for importable items.
-mediaFromPath :: (Importable a, Describable a, Deleteable a) => FilePath -> IO [a]
-mediaFromPath p = undefined
-
--- | Walk the directory tree to find all files below a given path.
-getFilesInTree :: FilePath -> IO [FilePath]
-getFilesInTree d | takeFileName d `elem` [".", ".."] = return []
-getFilesInTree d = do
-  isDir <- doesDirectoryExist d
-  isFile <- doesFileExist d
-  case (isDir, isFile) of
-    (True, _) -> concat <$> (getDirectoryContents d >>= mapM (getFilesInTree . (</>) d))
-    (_, True) -> return [d]
-    _         -> return []
