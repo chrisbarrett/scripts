@@ -26,7 +26,7 @@ import           Control.Monad
 import qualified Data.ByteString.Lazy.Char8   as L8
 import           Data.Char                    (toLower)
 import qualified Data.Conduit.Binary          as CB
-import           Data.Maybe                   (isJust)
+import           Data.Maybe                   (fromJust, isJust)
 import           Prelude                      hiding (catch)
 import           System.Directory
 import           System.Environment           (getArgs)
@@ -72,7 +72,7 @@ execute (Add args)    = do
   xs <- liftM concat $ mapM mediaFromPath paths
   when (null xs) $ putStrLn "No media found." >> exitFailure
 
-  let files = filter isJust $ map fst xs
+  let files = map fromJust $ filter isJust $ map fst xs
       media = map snd xs
   importMedia media
   promptDeleteOriginals files
