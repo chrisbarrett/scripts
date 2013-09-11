@@ -143,7 +143,10 @@ getYesOrNo deflt = do
 class Importable a where
   -- | Add the given media to the iTunes library.
   runImport :: FilePath -> a -> IO ()
-  -- | String representation of the given item, for feedback in the UI.
+
+-- | Represents things that can be described in the UI.
+class Describable a where
+  -- | String representation of the given item.
   describe :: a -> String
 
 -- | Represents things that can be deleted.
@@ -156,17 +159,19 @@ class Deleteable a where
 
 newtype MediaFile = MediaFile FilePath
 
-instance Importable MediaFile where
+instance Describable a where
   describe (MediaFile f) = takeFileName f
+
+instance Importable MediaFile where
   runImport dest (MediaFile f) = do
     copyFile f $ dest </> takeFileName f
 
--- | True if the given file can be imported by iTunes.
-isMedia :: FilePath -> Bool
-isMedia p = p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
-
 instance Deleteable MediaFile where
   delete (MediaFile f) = removeFile f
+
+-- | True if the given file can be imported by iTunes.
+isMedia :: FilePath -> Bool
+isMedia p = takeExtension p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
 
 --------------------------------------------------------------------------------
 -- Zip files
