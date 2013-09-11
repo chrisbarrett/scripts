@@ -211,9 +211,9 @@ isZipFile p = do
 asZipFile :: FilePath -> IO (Maybe Zip)
 asZipFile p = do
   isZip <- isZipFile p
-  return $ case isZip of
-    True  -> Just $ Zip p
-    False -> Nothing
+  return $ if isZip
+           then Just $ Zip p
+           else Nothing
 
 instance Importable Zip where
   importTasks dest (Zip f) = withArchive f $ do
