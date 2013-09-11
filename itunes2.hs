@@ -73,7 +73,7 @@ execute (Add args)    = do
 
   let files = map fromJust $ filter isJust $ map fst xs
       media = map snd xs
-  mapM importMedia media
+  mapM_ importMedia media
   promptDeleteOriginals files
 
   where
@@ -112,8 +112,10 @@ execute (Add args)    = do
 
     -- | Import each media item into iTunes.
     importMedia :: Importable -> IO ()
-    importMedia x =
-      liftM importTasks itunesImportFolder x >>= mapM $ \t ->
+    importMedia x = do
+      dest <- itunesImportFolder
+      tasks <- importTasks dest x
+      forM_ tasks $ \t -> do
         runTask t
         putDoc $ green (text "  A ") <+> text (taskName t)  <> linebreak
 
@@ -148,8 +150,16 @@ getYesOrNo deflt = do
 -- Filesystem utilities
 
 -- | Filter the input files for importable items.
-mediaFromPath :: FilePath -> IO [(Maybe FilePath, Importable)]
-mediaFromPath p@(isMedia -> True) = return [ (Just p, MediaFile p) ]
+mediaFromPath :: FilePath -> IO [(FilePath, Importable)]
+mediaFromPath p@(isMedia -> True) = return [ (p, MediaFile p) ]
+mediaFromPath p = do
+  dir <- doesDirectoryExist p
+  zip <- isZipFile p
+  return $ case (dir, zip) of
+    (True, _) -> liftM concat $ getFilesInTree p >>= mapM mediaFromPath
+    (_, True) -> [(p, ZipFile p)]
+    _         -> []
+
 
 -- | Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
@@ -163,7 +173,7 @@ getFilesInTree d = do
     _         -> return []
 
 -- | Create tasks to add the given media to the iTunes library.
-importTasks :: FilePath -> a -> IO [ImportTask]
+importTasks :: FilePath -> Importable -> IO [ImportTask]
 
 importTasks dest (MediaFile f) =
   return [ ImportTask { taskName = takeFileName f
