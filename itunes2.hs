@@ -71,7 +71,7 @@ execute (Add args)    = do
   xs <- liftM concat $ mapM mediaFromPath paths
   when (null xs) $ putStrLn "No media found." >> exitFailure
 
-  let files = map fromJust $ filter isJust $ map fst xs
+  let files = map fst xs
       media = map snd xs
   mapM_ importMedia media
   promptDeleteOriginals files
@@ -153,12 +153,12 @@ getYesOrNo deflt = do
 mediaFromPath :: FilePath -> IO [(FilePath, Importable)]
 mediaFromPath p@(isMedia -> True) = return [ (p, MediaFile p) ]
 mediaFromPath p = do
-  dir <- doesDirectoryExist p
-  zip <- isZipFile p
-  return $ case (dir, zip) of
+  isDir <- doesDirectoryExist p
+  isZip <- isZipFile p
+  case (isDir, isZip) of
     (True, _) -> liftM concat $ getFilesInTree p >>= mapM mediaFromPath
-    (_, True) -> (p, ZipFile p)
-    _         -> []
+    (_, True) -> return [ (p, ZipFile p)  ]
+    otherwise -> return []
 
 
 -- | Walk the directory tree to find all files below a given path.
