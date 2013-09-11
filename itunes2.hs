@@ -104,10 +104,18 @@ execute (Add args)    = do
         putStrLn $ "Deleted " ++ show n ++ " " ++ pluralize n "item" ++ "."
 
     deleteMedia :: MediaType -> IO ()
-    deleteMedia (File path) = do
-      removeFile path
-      putDoc $ red (text "  D ") <+> text path <> linebreak
-    deleteMedia (Stream _ _ (Just archive)) = undefined
+    deleteMedia (Stream _ _ (Just archive)) = rm archive
+    deleteMedia (File path)                 = rm path
+
+    rm :: FilePath -> IO ()
+    rm p = do
+      exists <- doesFileExist p
+      when exists $ do
+        removeFile p
+        putDoc $ red (text "  D ") <+> text p <> linebreak
+
+
+
 
 --- Concatenate a monadic filepath with pure filepaths.
 (/>) :: IO FilePath -> FilePath -> IO FilePath
