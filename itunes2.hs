@@ -157,7 +157,6 @@ mediaFromPath p = do
   zip <- isZipFile p
   return $ case (dir, zip) of
     (True, _) -> liftM concat $ getFilesInTree p >>= mapM mediaFromPath
-    (_, True) -> (p, ZipFile p)
     _         -> []
 
 
