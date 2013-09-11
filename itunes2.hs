@@ -219,5 +219,5 @@ instance Importable Zip where
   importTasks dest z@(Zip f) = withArchive f $ do
     names <- entryNames
     mapM $ \x -> return $ ImportTask { taskName = x
-                                    , runTask = \() -> withArchive f $ extractFiles [x] dest
+                                    , runTask = \ -> withArchive f $ extractFiles [x] dest
                                     }
