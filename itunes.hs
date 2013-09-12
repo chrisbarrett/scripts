@@ -167,7 +167,7 @@ mediaFromPath p = do
   isZip <- isZipFile p
   case (isDir, isZip) of
     (True, _) -> liftM concat $ getFilesInTree p >>= mapM mediaFromPath
-    (_, True) -> return [ (p, ZipFile p)  ]
+    (_, True) -> return [ (p, ZipFile p) ]
     _         -> return []
 
 
@@ -182,6 +182,7 @@ getFilesInTree d = do
     (_, True) -> return [d]
     _         -> return []
 
+
 -- | Create tasks to add the given media to the iTunes library.
 importTasks :: FilePath -> Importable -> IO [ImportTask]
 
@@ -195,6 +196,7 @@ importTasks dest (ZipFile f) = withArchive f $ do
     return ImportTask { taskName = x
                       , runTask = withArchive f $ extractFiles [x] dest
                       }
+
 
 -- | True if the given file can be imported by iTunes.
 isMedia :: FilePath -> Bool
