@@ -30,7 +30,6 @@ import           System.Directory
 import           System.Environment           (getArgs)
 import           System.Exit                  (exitFailure)
 import           System.FilePath.Posix
-import           System.IO.Unsafe             (unsafePerformIO)
 import           Text.PrettyPrint.ANSI.Leijen (dullyellow, green, linebreak,
                                                putDoc, red, text, (<+>), (<>))
 
@@ -164,7 +163,7 @@ mediaFromPath :: FilePath -> IO [(FilePath, Importable)]
 mediaFromPath p = do
   isDir <- doesDirectoryExist p
   isZip <- isZipFile p
-  isMedia <- isMedia p
+  isMedia <- isMediaFile p
   case (isDir, isZip, isMedia) of
     (True, _, _) -> liftM concat $ getFilesInTree p >>= mapM mediaFromPath
     (_, True, _) -> return [ (p, ZipFile p) ]
@@ -192,17 +191,22 @@ importTasks dest (MediaFile f) =
                       , runTask = copyFile f $ dest </> takeFileName f } ]
 
 importTasks dest (ZipFile f) = withArchive f $ do
-  entries <- liftM ( filterM isMedia ) entryNames
-  forM ( unsafePerformIO entries ) $ \x ->
+  entries <- liftM ( filter hasMediaExt ) entryNames
+  forM entries $ \x ->
     return ImportTask { taskName = x
                       , runTask = withArchive f $ extractFiles [x] dest
                       }
 
 
 -- | True if the given file can be imported by iTunes.
-isMedia :: FilePath -> IO Bool
-isMedia p = doesFileExist p >>= return . (&&) (takeExtension p `elem` mediaExts)
-  where mediaExts = [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
+isMediaFile :: FilePath -> IO Bool
+isMediaFile p = do
+  exists <- doesFileExist p
+  return $ exists && hasMediaExt p
+
+-- | True if the given file has a media file extension.
+hasMediaExt :: FilePath -> Bool
+hasMediaExt p = takeExtension p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", ".mpg", ".aac", ".aiff"]
 
 -- | Read file header to test whether the given path points to a zip archive.
 isZipFile :: FilePath -> IO Bool
