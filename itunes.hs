@@ -213,7 +213,7 @@ hasMediaExt p = takeExtension p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", 
 isZipFile :: FilePath -> IO Bool
 isZipFile p = do
   isFile <- doesFileExist p
-  return $ if isFile
+  if isFile
     then do header <- liftM (L8.unpack . L8.take 2) (L8.readFile p)
-            header == "PK"
-    else False
+            return $ header == "PK"
+    else return False
