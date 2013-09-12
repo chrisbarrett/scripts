@@ -161,7 +161,6 @@ data Importable = MediaFile FilePath
 -- | Filter the input files for importable items.
 mediaFromPath :: FilePath -> IO [(FilePath, Importable)]
 mediaFromPath p = do
-  putStrLn "mediaFromPath"
   isDir <- doesDirectoryExist p
   isZip <- isZipFile p
   isMedia <- isMediaFile p
