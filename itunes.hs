@@ -192,8 +192,8 @@ importTasks dest (MediaFile f) =
                       , runTask = copyFile f $ dest </> takeFileName f } ]
 
 importTasks dest (ZipFile f) = withArchive f $ do
-  entries <- unsafePerformIO $ liftM ( filterM isMedia ) entryNames
-  forM entries $ \x ->
+  entries <- liftM ( filterM isMedia ) entryNames
+  forM ( unsafePerformIO entries ) $ \x ->
     return ImportTask { taskName = x
                       , runTask = withArchive f $ extractFiles [x] dest
                       }
