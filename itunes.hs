@@ -1,6 +1,5 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections       #-}
-{-# LANGUAGE ViewPatterns        #-}
 {-
 
  itunes
@@ -162,14 +161,15 @@ data Importable = MediaFile FilePath
 
 -- | Filter the input files for importable items.
 mediaFromPath :: FilePath -> IO [(FilePath, Importable)]
-mediaFromPath p@(isMedia -> True) = return [ (p, MediaFile p) ]
 mediaFromPath p = do
   isDir <- doesDirectoryExist p
   isZip <- isZipFile p
-  case (isDir, isZip) of
-    (True, _) -> liftM concat $ getFilesInTree p >>= mapM mediaFromPath
-    (_, True) -> return [ (p, ZipFile p) ]
-    _         -> return []
+  isMedia <- isMedia p
+  case (isDir, isZip, isMedia) of
+    (True, _, _) -> liftM concat $ getFilesInTree p >>= mapM mediaFromPath
+    (_, True, _) -> return [ (p, ZipFile p) ]
+    (_, _, True) -> return [ (p, MediaFile p) ]
+    _            -> return []
 
 
 -- | Walk the directory tree to find all files below a given path.
