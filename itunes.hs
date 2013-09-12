@@ -176,7 +176,6 @@ mediaFromPath p = do
 getFilesInTree :: FilePath -> IO [FilePath]
 getFilesInTree d | takeFileName d `elem` [".", ".."] = return []
 getFilesInTree d = do
-  putStrLn "getFilesInTree"
   isDir <- doesDirectoryExist d
   isFile <- doesFileExist d
   case (isDir, isFile) of
