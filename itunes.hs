@@ -212,5 +212,9 @@ hasMediaExt p = takeExtension p `elem` [".m4a", ".m4v", ".mov", ".mp4", ".mp3", 
 -- | Read file header to test whether the given path points to a zip archive.
 isZipFile :: FilePath -> IO Bool
 isZipFile p = do
-  header <- liftM (L8.unpack . L8.take 2) (L8.readFile p)
-  return $ header == "PK"
+  isFile <- doesFileExist p
+  if isFile
+    then do
+      header <- liftM (L8.unpack . L8.take 2) (L8.readFile p)
+      return $ header == "PK"
+    else return False
