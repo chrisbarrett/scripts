@@ -196,7 +196,6 @@ importTasks dest (ZipFile f) = withArchive f $ do
     return ImportTask { taskName = x
                       , runTask = withArchive f $ extractFiles [x] dest }
 
-
 -- | True if the given file can be imported by iTunes.
 isMediaFile :: FilePath -> IO Bool
 isMediaFile p = do
