@@ -194,8 +194,7 @@ importTasks dest (ZipFile f) = withArchive f $ do
   entries <- liftM (filter hasMediaExt) entryNames
   forM entries $ \x ->
     return ImportTask { taskName = x
-                      , runTask = withArchive f $ extractFiles [x] dest
-                      }
+                      , runTask = withArchive f $ extractFiles [x] dest }
 
 
 -- | True if the given file can be imported by iTunes.
