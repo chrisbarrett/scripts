@@ -162,12 +162,12 @@ data Importable = MediaFile FilePath
 mediaFromPath :: FilePath -> IO [(FilePath, Importable)]
 mediaFromPath p = do
   isDir <- doesDirectoryExist p
-  isZip <- isZipFile p
   isMedia <- isMediaFile p
-  case (isDir, isZip, isMedia) of
+  isZip <- isZipFile p
+  case (isDir, isMedia, isZip) of
     (True, _, _) -> liftM concat $ getFilesInTree p >>= mapM mediaFromPath
-    (_, True, _) -> return [ (p, ZipFile p) ]
-    (_, _, True) -> return [ (p, MediaFile p) ]
+    (_, True, _) -> return [ (p, MediaFile p) ]
+    (_, _, True) -> return [ (p, ZipFile p) ]
     _            -> return []
 
 
