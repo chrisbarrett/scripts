@@ -1,5 +1,6 @@
 module Main where
 
+import Itunes.Media
 import           Control.Monad
 import           Control.Applicative
 import           Control.Exception
