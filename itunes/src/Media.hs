@@ -6,6 +6,7 @@ module Itunes.Media
        where
 
 import System.Directory
+import           System.FilePath.Posix
 
 -- | Associates an item to import with a label for UI feedback.
 data ImportTask = ImportTask
