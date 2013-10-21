@@ -1,4 +1,4 @@
-module Itunes.Import
+module Import
        (
          addToItunes
        )
