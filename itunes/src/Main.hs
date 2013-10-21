@@ -5,7 +5,6 @@ module Main where
 import           Control.Exception
 import           Control.Monad
 import           Itunes.Import
-import           Prelude            hiding (catch)
 import           System.Directory   (canonicalizePath)
 import           System.Environment (getArgs)
 import           System.Exit        (exitFailure)
