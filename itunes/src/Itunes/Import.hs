@@ -99,3 +99,13 @@ mediaFromPath p = do
     (_, True, _) -> return [ (p, MediaFile p) ]
     (_, _, True) -> return [ (p, ZipFile p) ]
     _            -> return []
+-- | Walk the directory tree to find all files below a given path.
+getFilesInTree :: FilePath -> IO [FilePath]
+getFilesInTree d | takeFileName d `elem` [".", ".."] = return []
+getFilesInTree d = do
+  isDir <- doesDirectoryExist d
+  isFile <- doesFileExist d
+  case (isDir, isFile) of
+    (True, _) -> concat <$> (getDirectoryContents d >>= mapM (getFilesInTree . (</>) d))
+    (_, True) -> return [d]
+    _         -> return []
