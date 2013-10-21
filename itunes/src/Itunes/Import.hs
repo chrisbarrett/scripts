@@ -87,3 +87,15 @@ getYesOrNo deflt = do
     'n'  -> return False
     '\n' -> return deflt
     _    -> getYesOrNo deflt
+
+-- | Filter the input files for importable items.
+mediaFromPath :: FilePath -> IO [(FilePath, Importable)]
+mediaFromPath p = do
+  isDir <- doesDirectoryExist p
+  isMedia <- isMediaFile p
+  isZip <- isZipFile p
+  case (isDir, isMedia, isZip) of
+    (True, _, _) -> liftM concat $ getFilesInTree p >>= mapM mediaFromPath
+    (_, True, _) -> return [ (p, MediaFile p) ]
+    (_, _, True) -> return [ (p, ZipFile p) ]
+    _            -> return []
