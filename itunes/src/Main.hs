@@ -2,7 +2,7 @@
 {-# LANGUAGE TupleSections       #-}
 module Main where
 
-import Itunes.Media
+import Itunes.Import
 import           System.Environment           (getArgs)
 import           System.Exit                  (exitFailure)
 
@@ -36,3 +36,6 @@ execute Help          = putStrLn "itunes: Commands for working with iTunes" >> s
 execute Invalid       = putStrLn "Invalid usage." >> showUsage >> exitFailure
 execute (Unknown cmd) = putStrLn ("Unrecognised command: " ++ cmd) >> showUsage >> exitFailure
 execute (Add args)    = pathsFromArgs >>= addToItunes
+  where
+    pathsFromArgs = forM args $ \path ->
+        canonicalizePath path `catch` (\(_::IOException) -> return path)
