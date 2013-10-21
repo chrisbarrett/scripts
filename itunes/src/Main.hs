@@ -12,6 +12,7 @@ import           System.Exit                  (exitFailure)
 import           Text.PrettyPrint.ANSI.Leijen (dullyellow, green, linebreak,
                                                putDoc, red, text, (<+>), (<>))
 
+
 --------------------------------------------------------------------------------
 -- Main program
 
