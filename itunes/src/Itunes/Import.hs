@@ -3,7 +3,7 @@ module Import
          addToItunes
        )
        where
-import Itunes.Media
+import Media
 import           Control.Monad
 import           Control.Applicative
 import           Data.Char                    (toLower)
