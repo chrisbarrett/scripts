@@ -19,7 +19,7 @@ executable itunes
   main-is:             Main.hs
   -- other-modules:
   -- other-extensions:
-  build-depends:       base ==4.6,
+  build-depends:       base,
                        ansi-wl-pprint ==0.6.6,
                        zip-conduit ==0.2.2,
                        temporary ==1.1
