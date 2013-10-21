@@ -1,4 +1,4 @@
-module Itunes.Media
+module Media
        (
          ImportTask(..)
        , Importable(..)
