@@ -3,7 +3,7 @@
 module Main where
 
 import           Control.Exception
-import           Import
+import           Itunes.Import
 import           Prelude            hiding (catch)
 import           System.Environment (getArgs)
 import           System.Exit        (exitFailure)
