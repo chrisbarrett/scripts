@@ -3,6 +3,8 @@ module Itunes.Media
          ImportTask(..)
        , Importable(..)
        , importTasks
+       , isMediaFile
+       , isZipFile
        )
        where
 
@@ -21,18 +23,6 @@ data ImportTask = ImportTask
 
 data Importable = MediaFile FilePath
                 | ZipFile FilePath
-
-
--- | Walk the directory tree to find all files below a given path.
-getFilesInTree :: FilePath -> IO [FilePath]
-getFilesInTree d | takeFileName d `elem` [".", ".."] = return []
-getFilesInTree d = do
-  isDir <- doesDirectoryExist d
-  isFile <- doesFileExist d
-  case (isDir, isFile) of
-    (True, _) -> concat <$> (getDirectoryContents d >>= mapM (getFilesInTree . (</>) d))
-    (_, True) -> return [d]
-    _         -> return []
 
 
 -- | Create tasks to add the given media to the iTunes library.
