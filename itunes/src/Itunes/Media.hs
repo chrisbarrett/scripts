@@ -8,11 +8,11 @@ module Media
        )
        where
 
-import qualified Data.ByteString.Lazy.Char8   as L8
 import           Codec.Archive.Zip
-import System.Directory
-import           System.FilePath.Posix
 import           Control.Monad
+import qualified Data.ByteString.Lazy.Char8 as L8
+import           System.Directory
+import           System.FilePath.Posix
 
 
 -- | Associates an item to import with a label for UI feedback.
