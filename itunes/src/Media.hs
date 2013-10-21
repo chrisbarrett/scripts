@@ -5,6 +5,7 @@ module Itunes.Media
        )
        where
 
+import           Codec.Archive.Zip
 import           Control.Applicative
 import System.Directory
 import           System.FilePath.Posix
