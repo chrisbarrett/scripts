@@ -4,6 +4,7 @@ module Itunes.Media
        , Importable(..)
        )
        where
+
 import           Control.Applicative
 import System.Directory
 import           System.FilePath.Posix
