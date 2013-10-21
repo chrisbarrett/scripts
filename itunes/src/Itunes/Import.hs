@@ -27,8 +27,8 @@ addToItunes paths = do
 
   where
     -- | Warn when trying to import items that do not exist on the filesystem.
-    warnWhereNotExists paths = do
-      notExists <- filterM (liftM not . fileOrDirectoryExists) paths
+    warnWhereNotExists ps = do
+      notExists <- filterM (liftM not . fileOrDirectoryExists) ps
       unless (null notExists) $ do
         putDoc $ dullyellow (text "Warning: the following items do not exist:") <> linebreak
         mapM_ (\x -> putDoc $
