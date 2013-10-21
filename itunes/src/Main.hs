@@ -1,5 +1,6 @@
 module Main where
 
+import           Control.Applicative
 import           Control.Exception
 import           Data.Char                    (toLower)
 import           Prelude                      hiding (catch)
