@@ -5,6 +5,8 @@ module Main where
 import Itunes.Import
 import           System.Environment           (getArgs)
 import           System.Exit                  (exitFailure)
+import           Control.Exception
+import           Prelude                      hiding (catch)
 
 -- | Enumerates the possible parsed values of the program arguments.
 data Args = Add [FilePath] | Help | Invalid | Unknown String
