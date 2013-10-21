@@ -2,9 +2,8 @@
 {-# LANGUAGE TupleSections       #-}
 module Main where
 
-import           Itunes.Import
-
 import           Control.Exception
+import           Itunes.Import
 import           Prelude            hiding (catch)
 import           System.Environment (getArgs)
 import           System.Exit        (exitFailure)
