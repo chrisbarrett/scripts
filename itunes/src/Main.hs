@@ -32,10 +32,14 @@ showUsage =
 
 -- | Run the program as specified by the program arguments.
 execute :: Args -> IO ()
-execute Help          = putStrLn "itunes: Commands for working with iTunes" >> showUsage
-execute Invalid       = putStrLn "Invalid usage." >> showUsage >> exitFailure
-execute (Unknown cmd) = putStrLn ("Unrecognised command: " ++ cmd) >> showUsage >> exitFailure
-execute (Add args)    = pathsFromArgs >>= addToItunes
+execute Help =
+  putStrLn "itunes: Commands for working with iTunes" >> showUsage
+execute Invalid =
+  putStrLn "Invalid usage." >> showUsage >> exitFailure
+execute (Unknown cmd) =
+  putStrLn ("Unrecognised command: " ++ cmd) >> showUsage >> exitFailure
+execute (Add args) =
+  pathsFromArgs >>= addToItunes
   where
     pathsFromArgs = forM args $ \path ->
         canonicalizePath path `catch` (\(_::IOException) -> return path)
