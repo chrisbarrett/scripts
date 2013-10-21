@@ -3,10 +3,13 @@
 module Main where
 
 import           Control.Exception
+import           Control.Monad
 import           Itunes.Import
 import           Prelude            hiding (catch)
+import           System.Directory
 import           System.Environment (getArgs)
 import           System.Exit        (exitFailure)
+
 
 -- | Enumerates the possible parsed values of the program arguments.
 data Args = Add [FilePath] | Help | Invalid | Unknown String
