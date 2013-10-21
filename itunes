@@ -1,2 +1,0 @@
-#!/usr/bin/env sh
-runhaskell $(dirname $0)/itunes.hs "$@"
