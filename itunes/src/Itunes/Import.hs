@@ -5,11 +5,8 @@ module Itunes.Import
        where
 import           Control.Monad
 import           Control.Applicative
-import           Control.Exception
 import           Data.Char                    (toLower)
-import           Prelude                      hiding (catch)
 import           System.Directory
-
 import           Text.PrettyPrint.ANSI.Leijen (dullyellow, green, linebreak,
                                                putDoc, red, text, (<+>), (<>))
 addToItunes :: [FilePath] -> IO ()
@@ -26,10 +23,6 @@ addToItunes paths = do
   promptDeleteOriginals files
 
   where
-    -- | Extract targets to be imported from program arguments.
-    pathsFromArgs = forM args $ \path ->
-        canonicalizePath path `catch` (\(_::IOException) -> return path)
-
     -- | Warn when trying to import items that do not exist on the filesystem.
     warnWhereNotExists paths = do
       notExists <- filterM (liftM not . fileOrDirectoryExists) paths
