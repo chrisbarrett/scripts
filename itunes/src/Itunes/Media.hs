@@ -10,7 +10,6 @@ module Media
 
 import qualified Data.ByteString.Lazy.Char8   as L8
 import           Codec.Archive.Zip
-import           Control.Applicative
 import System.Directory
 import           System.FilePath.Posix
 import           Control.Monad
