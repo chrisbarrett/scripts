@@ -13,7 +13,7 @@ import           System.Directory
 import           Text.PrettyPrint.ANSI.Leijen (dullyellow, green, linebreak,
                                                putDoc, red, text, (<+>), (<>))
 addToItunes :: [FilePath] -> IO ()
-addToItunes paths =
+addToItunes paths = do
   itunesExists <- itunesImportFolder >>= doesDirectoryExist
   unless itunesExists $ putStrLn "Cannot find iTunes Media folder" >> exitFailure
   warnWhereNotExists paths
