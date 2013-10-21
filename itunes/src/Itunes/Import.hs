@@ -3,6 +3,8 @@ module Import
          addToItunes
        )
        where
+import           System.FilePath.Posix
+
 import           Control.Applicative
 import           Control.Monad
 import           Data.Char                    (toLower)
