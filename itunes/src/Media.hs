@@ -7,6 +7,7 @@ module Itunes.Media
 
 import System.Directory
 import           System.FilePath.Posix
+import           Control.Monad
 
 -- | Associates an item to import with a label for UI feedback.
 data ImportTask = ImportTask
