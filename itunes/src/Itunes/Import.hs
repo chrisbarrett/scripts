@@ -3,10 +3,10 @@ module Import
          addToItunes
        )
        where
-import Media
-import           Control.Monad
 import           Control.Applicative
+import           Control.Monad
 import           Data.Char                    (toLower)
+import           Media
 import           System.Directory
 import           Text.PrettyPrint.ANSI.Leijen (dullyellow, green, linebreak,
                                                putDoc, red, text, (<+>), (<>))
@@ -100,6 +100,7 @@ mediaFromPath p = do
     (_, True, _) -> return [ (p, MediaFile p) ]
     (_, _, True) -> return [ (p, ZipFile p) ]
     _            -> return []
+
 -- | Walk the directory tree to find all files below a given path.
 getFilesInTree :: FilePath -> IO [FilePath]
 getFilesInTree d | takeFileName d `elem` [".", ".."] = return []
