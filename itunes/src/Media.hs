@@ -2,6 +2,7 @@ module Itunes.Media
        (
          ImportTask(..)
        , Importable(..)
+       , mediaFromPath
        )
        where
 
