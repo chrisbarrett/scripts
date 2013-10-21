@@ -6,7 +6,7 @@ module Itunes.Import
 import           Control.Applicative
 import           Control.Monad
 import           Data.Char                    (toLower)
-import           Media
+import           Itunes.Media
 import           System.Directory
 import           System.Exit                  (exitFailure)
 import           System.FilePath.Posix
