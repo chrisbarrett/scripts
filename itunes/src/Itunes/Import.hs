@@ -3,6 +3,8 @@ module Import
          addToItunes
        )
        where
+import           System.Exit                  (exitFailure)
+
 import           Control.Applicative
 import           Control.Monad
 import           Data.Char                    (toLower)
