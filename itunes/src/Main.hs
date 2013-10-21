@@ -1,5 +1,5 @@
 module Main where
-
+import           Control.Monad
 import           Control.Applicative
 import           Control.Exception
 import           Data.Char                    (toLower)
