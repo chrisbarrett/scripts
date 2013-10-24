@@ -10,7 +10,8 @@ if [ y_or_n "WARNING: MacPorts and all ports will be reinstalled. Continue?" ]; 
     echo aborted.
     exit 1
 fi
-
 cd
+# accept the Xcode licence
+xcodebuild -license
 # save list of ports
 port -qv installed > ports.txt
