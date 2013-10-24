@@ -18,6 +18,11 @@ port -f uninstall installed
 # Clean any partially-completed builds.
 port clean all
 # Restore ports.
+echo <<EOF
+Restoring ports.
+If this fails, browse ~/ports.txt and install the ports you want manually.
+Note that most of the ports in this list will probably be dependencies.
+EOF
 curl -O \
   https://svn.macports.org/repository/macports/contrib/restore_ports/restore_ports.tcl
 chmod +x restore_ports.tcl
