@@ -19,7 +19,7 @@ port -f uninstall installed
 port clean all
 # Restore scripts.
 curl -O \
-  https://svn.macports.org/repository/macports/contrib/restore_ports/restore_ports.tcl
+  https://svn.macports.org/repository/macports/contrib/restore_ports/restore_ports.tcl
 chmod +x restore_ports.tcl
 ./restore_ports.tcl ports.txt
 rm ./restore_ports.tcl
