@@ -11,13 +11,17 @@ if [ y_or_n "WARNING: MacPorts and all ports will be reinstalled. Continue?" ]; 
     exit 1
 fi
 cd
+
 # Save list of ports.
 echo --> Writing ports list to ~/ports.txt
 port -qv installed > ports.txt
+
 # Uninstall all ports.
 port -f uninstall installed
+
 # Clean any partially-completed builds.
 port clean all
+
 # Restore ports.
 echo --> Reinstalling ports...
 curl -O \
