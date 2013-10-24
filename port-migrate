@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
-#
-# Migrate all installed ports.
-#
-# Use this script after upgrading to a new version of OS X.
-#
-# Source: <https://trac.macports.org/wiki/Migration>
+cat <<EOF
+port-migrate: Reinstall MacPorts and all ports.
 
-if [ y_or_n "WARNING: MacPorts and all ports will be reinstalled. Continue?" ]; then
+Use this script after upgrading to a new version of OS X.
+See <https://trac.macports.org/wiki/Migration>
+
+WARNING: ALL PORTS WILL BE REINSTALLED.
+EOF
+
+if [ y_or_n "Continue?" ]; then
     echo aborted.
     exit 1
 fi
