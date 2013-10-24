@@ -2,10 +2,6 @@
 cat <<EOF
 macports-uninstall: remove the MacPorts base system and all ports.
 EOF
-# Do not prompt for confirmation if an argument is supplied.
-
-
-y_or_n "Continue?" || exit 1
 
 echo --> Removing all ports...
 port -fp uninstall installed
