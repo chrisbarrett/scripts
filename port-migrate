@@ -20,7 +20,8 @@ port -f uninstall installed
 port clean all
 # Restore ports.
 echo --> Reinstalling ports...
-curl -O https://svn.macports.org/repository/macports/contrib/restore_ports/restore_ports.tcl
+curl -O \
+    https://svn.macports.org/repository/macports/contrib/restore_ports/restore_ports.tcl
 chmod +x restore_ports.tcl
 
 if ./restore_ports.tcl ~/ports.txt; then
