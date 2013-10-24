@@ -14,6 +14,16 @@ if [ y_or_n "Continue?" ]; then
 fi
 cd
 
+# Reinstall MacPorts.
+echo --> Reinstalling MacPorts base system...
+curl -O https://distfiles.macports.org/MacPorts/MacPorts-2.2.0.tar.bz2
+tar xf MacPorts-2.2.0.tar.bz2
+(
+    cd MacPorts-2.2.0
+    ./configure
+    make && make install
+)
+
 # Save list of ports.
 echo --> Writing ports list to ~/ports.txt
 port -qv installed > ports.txt
@@ -43,7 +53,7 @@ You must install the ports you want manually. See ~/ports.txt for a list of
 ports that were previously installed.
 
 EOF
-exit 1
+    exit 1
 fi
 
 # Local Variables:
