@@ -21,3 +21,4 @@ port clean all
 curl -O https://svn.macports.org/repository/macports/contrib/restore_ports/restore_ports.tcl
 chmod +x restore_ports.tcl
 ./restore_ports.tcl ports.txt
+rm ./restore_ports.tcl
