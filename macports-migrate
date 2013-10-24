@@ -14,21 +14,12 @@ if [ y_or_n "Continue?" ]; then
 fi
 cd
 
-# Reinstall MacPorts.
-echo --> Reinstalling MacPorts base system...
-macports_install
-
 # Save list of ports.
 echo --> Writing ports list to ~/ports.txt
 port -qv installed > ports.txt
 
-# Uninstall all ports.
-echo --> Uninstalling all ports...
-port -f uninstall installed
-
-# Clean any partially-completed builds.
-echo --> Cleaning...
-port clean all
+macports-uninstall
+macports-install
 
 # Restore ports.
 echo --> Reinstalling ports...
