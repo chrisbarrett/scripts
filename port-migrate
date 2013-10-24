@@ -21,7 +21,7 @@ port clean all
 echo <<EOF
 Restoring ports.
 If this fails, browse ~/ports.txt and install the ports you want manually.
-Most of the ports in this list will probably be dependencies and can be skipped.
+Most of the ports in this list will probably be dependencies and can be ignored.
 EOF
 curl -O \
   https://svn.macports.org/repository/macports/contrib/restore_ports/restore_ports.tcl
