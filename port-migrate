@@ -17,9 +17,11 @@ echo --> Writing ports list to ~/ports.txt
 port -qv installed > ports.txt
 
 # Uninstall all ports.
+echo --> Uninstalling all ports...
 port -f uninstall installed
 
 # Clean any partially-completed builds.
+echo --> Cleaning...
 port clean all
 
 # Restore ports.
