@@ -17,12 +17,16 @@ cd
 # Reinstall MacPorts.
 echo --> Reinstalling MacPorts base system...
 curl -O https://distfiles.macports.org/MacPorts/MacPorts-2.2.0.tar.bz2
-tar xf MacPorts-2.2.0.tar.bz2
+MACPORTS_TAR=MacPorts-2.2.0.tar.bz2
+MACPORTS_SRC=MacPorts-2.2.0
+tar xf $MACPORTS_TAR
 (
-    cd MacPorts-2.2.0
+    cd $MACPORTS_SRC
     ./configure
     make && make install
 )
+rm -rf $MACPORTS_SRC
+rm $MACPORTS_TAR
 
 # Save list of ports.
 echo --> Writing ports list to ~/ports.txt
