@@ -15,7 +15,7 @@ echo --> Writing ports list to ~/ports.txt
 PORTS_LIST=ports.txt
 port -qv installed > $PORTS_LIST
 
-macports-uninstall
+macports-uninstall -y
 macports-install
 
 # Restore ports.
