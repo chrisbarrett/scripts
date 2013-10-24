@@ -14,9 +14,9 @@ if [ y_or_n "Continue?" ]; then
 fi
 cd
 
-# Save list of ports.
 echo --> Writing ports list to ~/ports.txt
-port -qv installed > ports.txt
+PORTS_LIST=ports.txt
+port -qv installed > $PORTS_LIST
 
 macports-uninstall
 macports-install
@@ -27,7 +27,7 @@ curl -O \
     https://svn.macports.org/repository/macports/contrib/restore_ports/restore_ports.tcl
 chmod +x restore_ports.tcl
 
-if ./restore_ports.tcl ~/ports.txt; then
+if ./restore_ports.tcl $PORTS_LIST; then
     rm ./restore_ports.tcl
 else
     cat <<EOF
