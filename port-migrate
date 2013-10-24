@@ -33,7 +33,7 @@ chmod +x restore_ports.tcl
 if ./restore_ports.tcl ~/ports.txt; then
     rm ./restore_ports.tcl
 else
-    echo <<EOF
+    cat <<EOF
 Restoring ports failed.
 You must install the ports you want manually. See ~/ports.txt for a list of
 ports that were previously installed. Most of the ports in this list will
