@@ -6,7 +6,7 @@
 #
 # Source: <https://trac.macports.org/wiki/Migration>
 
-if [ y_or_n "Macports and all ports will be reinstalled. Continue?" ]; then
+if [ y_or_n "MacPorts and all ports will be reinstalled. Continue?" ]; then
     echo aborted.
     exit 1
 fi
