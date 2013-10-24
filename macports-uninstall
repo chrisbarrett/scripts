@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+cat <<EOF
+macports-uninstall: remove the MacPorts base system and all ports.
+EOF
+
+echo --> Removing all ports...
+port -fp uninstall installed
+
+echo --> Cleaning builds...
+port clean all
+
+echo --> Removing all MacPorts directories.
+rm -rf \
+    /opt/local \
+    /Applications/DarwinPorts \
+    /Applications/MacPorts \
+    /Library/LaunchDaemons/org.macports.* \
+    /Library/Receipts/DarwinPorts*.pkg \
+    /Library/Receipts/MacPorts*.pkg \
+    /Library/StartupItems/DarwinPortsStartup \
+    /Library/Tcl/darwinports1.0 \
+    /Library/Tcl/macports1.0 \
+
+# Local Variables:
+# mode: sh
+# End:
