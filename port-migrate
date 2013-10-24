@@ -12,22 +12,28 @@ if [ y_or_n "WARNING: MacPorts and all ports will be reinstalled. Continue?" ]; 
 fi
 cd
 # Save list of ports.
+echo --> Writing ports list to ~/ports.txt
 port -qv installed > ports.txt
 # Uninstall all ports.
 port -f uninstall installed
 # Clean any partially-completed builds.
 port clean all
 # Restore ports.
-echo <<EOF
-Restoring ports.
-If this fails, browse ~/ports.txt and install the ports you want manually.
-Most of the ports in this list will probably be dependencies and can be ignored.
-EOF
+echo --> Reinstalling ports...
 curl -O \
-  https://svn.macports.org/repository/macports/contrib/restore_ports/restore_ports.tcl
+    https://svn.macports.org/repository/macports/contrib/restore_ports/restore_ports.tcl
 chmod +x restore_ports.tcl
-./restore_ports.tcl ports.txt
-rm ./restore_ports.tcl
+if [[ ./restore_ports.tcl ~/ports.txt ]]; then
+    rm ./restore_ports.tcl
+else
+    echo <<EOF
+Restoring ports failed.
+You must install the ports you want manually. See ~/ports.txt for a list of
+ports that were previously installed. Most of the ports in this list will
+probably be dependencies and can be ignored.
+EOF
+exit 1
+fi
 
 # Local Variables:
 # mode: sh
