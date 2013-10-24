@@ -17,7 +17,7 @@ port -qv installed > ports.txt
 port -f uninstall installed
 # Clean any partially-completed builds.
 port clean all
-# Restore scripts.
+# Restore ports.
 curl -O \
   https://svn.macports.org/repository/macports/contrib/restore_ports/restore_ports.tcl
 chmod +x restore_ports.tcl
