@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+
+read -p "$1"
+case "$REPLY" in
+    "y") exit 0;;
+    "yes") exit 0;;
+    "n") exit 1;;
+    "no") exit 1;;
+    *)
+        echo Must type either y or n.
+        y_or_n $1;;
+esac
+
+# Local Variables:
+# mode: sh
+# End:
