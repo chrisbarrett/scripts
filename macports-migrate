@@ -12,7 +12,7 @@ y_or_n "Continue?" || exit 1
 cd
 
 echo --> Writing ports list to ~/ports.txt
-PORTS_LIST=ports.txt
+PORTS_LIST=~/ports.txt
 port -qv installed > $PORTS_LIST
 
 macports-uninstall -y
