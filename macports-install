@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+cat <<EOF
+macports-install: install the MacPorts base system.
+EOF
+
+curl -O https://distfiles.macports.org/MacPorts/MacPorts-2.2.0.tar.bz2
+MACPORTS_TAR=MacPorts-2.2.0.tar.bz2
+MACPORTS_SRC=MacPorts-2.2.0
+tar xf $MACPORTS_TAR
+(
+    cd $MACPORTS_SRC
+    ./configure
+    make && make install
+)
+rm -rf $MACPORTS_SRC
+rm $MACPORTS_TAR
+
+# Update ports list.
+PATH=/opt/local/bin:$PATH
+port -v selfupdate
+
+# Local Variables:
+# mode: sh
+# End:
