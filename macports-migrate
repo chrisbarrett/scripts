@@ -29,7 +29,7 @@ if ./restore_ports.tcl $PORTS_LIST; then
 else
     cat <<EOF
 
-    Restoring ports failed.
+Restoring ports failed.
 
 You must install the ports you want manually. See ~/ports.txt for a list of
 ports that were previously installed.
