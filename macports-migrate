@@ -8,17 +8,17 @@ See <https://trac.macports.org/wiki/Migration>
 WARNING: ALL PORTS WILL BE REINSTALLED.
 EOF
 
-# y_or_n "Continue?" || exit 1
-# cd
+y_or_n "Continue?" || exit 1
+cd
 
-# echo --> Writing ports list to ~/ports.txt
-# PORTS_LIST=ports.txt
-# port -qv installed > $PORTS_LIST
+echo --> Writing ports list to ~/ports.txt
+PORTS_LIST=ports.txt
+port -qv installed > $PORTS_LIST
 
-# macports-uninstall -y
-# macports-install
+macports-uninstall -y
+macports-install
 
-# Restore ports.
+Restore ports.
 echo --> Reinstalling ports...
 curl -O \
     https://svn.macports.org/repository/macports/contrib/restore_ports/restore_ports.tcl
