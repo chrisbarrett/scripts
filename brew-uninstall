@@ -4,18 +4,16 @@ brew-uninstall: Uninstall Homebrew and all supporting files.
 EOF
 
 set -e
-
 if which brew; then
     echo ---> Checking tools...
     /usr/bin/which -s git || brew install git
     test -d /usr/local/.git || brew update
+    PREFIX=brew --prefix
 
     echo ---> Removing Homebrew...
-    cd `brew --prefix`
     git checkout master
     git ls-files -z | pbcopy
-    rm -rf Cellar
-    bin/brew prune
+    brew prune
     pbpaste | xargs -0 rm
 
     echo ---> Removing supporting files...
@@ -23,7 +21,8 @@ if which brew; then
     rmdir -p bin Library share/man/man1 2> /dev/null
     rm -rf .git
 fi
-rm -fr Library/Homebrew Library/Aliases Library/Formula Library/Contributions
+rm -rf "$PREFIX"/Cellar
+rm -rf Library/Homebrew Library/Aliases Library/Formula Library/Contributions
 rm -rf ~/Library/Caches/Homebrew
 rm -rf ~/Library/Logs/Homebrew
 rm -rf /Library/Caches/Homebrew
