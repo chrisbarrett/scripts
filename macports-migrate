@@ -18,9 +18,7 @@ port -qv installed > $PORTS_LIST
 macports-uninstall -y
 macports-install
 
-
 echo --> Reinstalling ports...
-
 curl -O \
     https://svn.macports.org/repository/macports/contrib/restore_ports/restore_ports.tcl
 chmod +x restore_ports.tcl
