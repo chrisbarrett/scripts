@@ -23,6 +23,8 @@ echo ---> Updating ports list...
 PATH=/opt/local/bin:$PATH
 port -v selfupdate
 
+port selfupdate
+
 cat <<EOF
 
     MacPorts installed.
