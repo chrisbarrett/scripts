@@ -5,7 +5,7 @@ EOF
 
 set -e
 if which brew; then
-    PREFIX=brew --prefix
+    PREFIX=`brew --prefix`
 
     echo ---> Checking tools...
     which -s git || brew install git
