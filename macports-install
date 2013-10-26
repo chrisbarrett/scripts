@@ -3,7 +3,7 @@ cat <<EOF
 macports-install: install the MacPorts base system.
 EOF
 
-# Install macports
+# Install MacPorts
 
 curl -O https://distfiles.macports.org/MacPorts/MacPorts-2.2.0.tar.bz2
 MACPORTS_TAR=MacPorts-2.2.0.tar.bz2
