@@ -25,11 +25,7 @@ PATH=/opt/local/bin:$PATH
 port -v selfupdate
 port -v selfupdate
 
-cat <<EOF
-
-    MacPorts installed.
-
-EOF
+echo MacPorts installed.
 
 # Local Variables:
 # mode: sh
