@@ -22,8 +22,7 @@ echo ---> Updating ports list...
 
 PATH=/opt/local/bin:$PATH
 port -v selfupdate
-
-port selfupdate
+port -v selfupdate
 
 cat <<EOF
 
