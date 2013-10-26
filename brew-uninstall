@@ -6,8 +6,7 @@ EOF
 set -e
 if which brew; then
     echo ---> Checking tools...
-    /usr/bin/which -s git || brew install git
-    test -d /usr/local/.git || brew update
+    which -s git || brew install git
 
     echo ---> Removing Homebrew...
     git checkout master
