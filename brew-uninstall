@@ -15,13 +15,12 @@ if which brew; then
     brew prune
     pbpaste | xargs -0 rm
 
-    echo ---> Removing supporting files...
-    test -d Library/LinkedKegs &&
     PREFIX=brew --prefix
 else
     PREFIX=/usr/local
 fi
 
+echo ---> Removing supporting files...
 rm -rf "$PREFIX"/.git
 rm -rf "$PREFIX"/bin
 rm -rf "$PREFIX"/Library
