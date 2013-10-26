@@ -27,3 +27,4 @@ rm -fr Library/Homebrew Library/Aliases Library/Formula Library/Contributions
 rm -rf ~/Library/Caches/Homebrew
 rm -rf ~/Library/Logs/Homebrew
 rm -rf /Library/Caches/Homebrew
+rm -rf /usr/local/Cellar /usr/local/.git
