@@ -23,7 +23,6 @@ if which brew; then
     rmdir -p bin Library share/man/man1 2> /dev/null
     rm -rf .git
 fi
-echo ---> Removing caches.
 rm -fr Library/Homebrew Library/Aliases Library/Formula Library/Contributions
 rm -rf ~/Library/Caches/Homebrew
 rm -rf ~/Library/Logs/Homebrew
