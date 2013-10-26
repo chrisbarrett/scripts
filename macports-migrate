@@ -27,7 +27,7 @@ if ./restore_ports.tcl $PORTS_LIST; then
     rm ./restore_ports.tcl
     cat <<EOF
 
-    MacPorts migration succeeded.
+    MacPorts migrated successfully.
 
 EOF
 else
