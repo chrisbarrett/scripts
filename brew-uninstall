@@ -7,7 +7,8 @@ set -e
 if which brew; then
     PREFIX=`brew --prefix`
     if [ -d "$PREFIX"/.git ]; then
-        echo ---> Checking tools...
+        (
+            echo ---> Checking tools...
         which -s git || brew install git
         test -d  || brew update
 
@@ -16,6 +17,7 @@ if which brew; then
         git ls-files -z | pbcopy
         brew prune
         pbpaste | xargs -0 rm
+        )
     fi
 else
     PREFIX=/usr/local
