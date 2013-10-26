@@ -5,17 +5,17 @@ EOF
 
 set -e
 if which brew; then
+    PREFIX=brew --prefix
+
     echo ---> Checking tools...
     which -s git || brew install git
-    test -d /usr/local/.git || brew update
+    test -d "$PREFIX"/.git || brew update
 
     echo ---> Removing Homebrew...
     git checkout master
     git ls-files -z | pbcopy
     brew prune
     pbpaste | xargs -0 rm
-
-    PREFIX=brew --prefix
 else
     PREFIX=/usr/local
 fi
