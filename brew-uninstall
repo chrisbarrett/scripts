@@ -4,6 +4,7 @@ brew-uninstall: Uninstall Homebrew and all supporting files.
 EOF
 
 if which brew; then
+    echo 1
     PREFIX=`brew --prefix`
     if [ -d "$PREFIX"/.git ]; then
         echo ---> Checking tools...
@@ -17,8 +18,11 @@ if which brew; then
         pbpaste | xargs -0 rm
     fi
 else
+    echo 2
+
     PREFIX=/usr/local
 fi
+    echo 3
 
 echo ---> Removing supporting files...
 rm -rf "$PREFIX"/.git
