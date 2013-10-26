@@ -3,7 +3,6 @@ cat <<EOF
 brew-uninstall: Uninstall Homebrew and all supporting files.
 EOF
 
-set -e
 if which brew; then
     PREFIX=`brew --prefix`
     if [ -d "$PREFIX"/.git ]; then
