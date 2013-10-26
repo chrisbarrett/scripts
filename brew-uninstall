@@ -22,7 +22,7 @@ else
 
     PREFIX=/usr/local
 fi
-    echo 3
+echo 3
 
 echo ---> Removing supporting files...
 rm -rf "$PREFIX"/.git
