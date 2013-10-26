@@ -21,6 +21,12 @@ rm -rf \
     /Library/Tcl/darwinports1.0 \
     /Library/Tcl/macports1.0 \
 
+cat <<EOF
+
+    MacPorts uninstalled.
+
+EOF
+
 # Local Variables:
 # mode: sh
 # End:
