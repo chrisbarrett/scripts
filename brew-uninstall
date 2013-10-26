@@ -8,7 +8,6 @@ if which brew; then
     echo ---> Checking tools...
     /usr/bin/which -s git || brew install git
     test -d /usr/local/.git || brew update
-    PREFIX=brew --prefix
 
     echo ---> Removing Homebrew...
     git checkout master
@@ -20,6 +19,7 @@ if which brew; then
     test -d Library/LinkedKegs && rm -r Library/LinkedKegs
     rmdir -p bin Library share/man/man1 2> /dev/null
     rm -rf .git
+    PREFIX=brew --prefix
 else
     PREFIX=/usr/local
 fi
