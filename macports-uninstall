@@ -9,7 +9,7 @@ port -fp uninstall installed
 echo ---> Cleaning builds...
 port clean all
 
-echo ---> Removing all MacPorts directories.
+echo ---> Removing all MacPorts directories
 rm -rf \
     /opt/local \
     /Applications/DarwinPorts \
