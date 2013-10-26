@@ -21,6 +21,7 @@ rm $MACPORTS_TAR
 echo ---> Updating ports list...
 
 PATH=/opt/local/bin:$PATH
+# Run twice, in case base version was updated in the first run.
 port -v selfupdate
 port -v selfupdate
 
