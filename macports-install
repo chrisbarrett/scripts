@@ -3,7 +3,7 @@ cat <<EOF
 macports-install: install the MacPorts base system.
 EOF
 
-# Install MacPorts
+echo ---> Installing MacPorts...
 
 curl -O https://distfiles.macports.org/MacPorts/MacPorts-2.2.0.tar.bz2
 MACPORTS_TAR=MacPorts-2.2.0.tar.bz2
@@ -17,7 +17,8 @@ tar xf $MACPORTS_TAR
 rm -rf $MACPORTS_SRC
 rm $MACPORTS_TAR
 
-# Update ports list.
+
+echo ---> Updating ports list...
 
 PATH=/opt/local/bin:$PATH
 port -v selfupdate
