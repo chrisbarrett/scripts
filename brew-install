@@ -3,6 +3,7 @@ cat <<EOF
 brew-install: Install Homebrew.
 EOF
 if [ -z `which brew` ]; then
-ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
+    ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
 else
     echo Homebrew appears to be already installed.
+fi
