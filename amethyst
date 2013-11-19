@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-amethyst_stop
-open -n /Applications/{Amethyst,Honer}.app
+amethyst-stop
+amethyst-start
