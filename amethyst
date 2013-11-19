@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+amethyst_start
+open -n /Applications/{Amethyst,Honer}.app
