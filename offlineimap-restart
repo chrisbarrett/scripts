@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+pkill 'offlineimap$'
+
+(
+    # Give offlineimap time to shut down.
+    sleep 10
+    offlineimap
+)
