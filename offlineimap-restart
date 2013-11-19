@@ -4,6 +4,6 @@ pkill 'offlineimap$'
 
 (
     # Give offlineimap time to shut down.
-    sleep 10
+    sleep 20
     offlineimap
 ) &
