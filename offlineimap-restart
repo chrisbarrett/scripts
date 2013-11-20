@@ -2,7 +2,7 @@
 
 function notify {
     command -v growlnotify && \
-        growlnotify --appIcon iTerm2 -m "$1"
+        growlnotify -n iTerm2 -a iTerm2 -m "$1"
 }
 
 function offlineimap_start {
