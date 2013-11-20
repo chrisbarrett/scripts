@@ -19,6 +19,8 @@ function offlineimap_stop {
     fi
 }
 
+################################################################################
+
 (
     offlineimap_stop
     offlineimap_start
