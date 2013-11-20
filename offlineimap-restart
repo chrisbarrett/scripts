@@ -25,7 +25,4 @@ function offlineimap_stop {
 
 ################################################################################
 
-(
-    offlineimap_stop
-    offlineimap_start
-) > /dev/null 2>&1 &
+( offlineimap_stop; offlineimap_start) > /dev/null 2>&1 &
