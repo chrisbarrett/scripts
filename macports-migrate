@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 cat <<EOF
-macports-migrate: Reinstall MacPorts and all ports.
+macports-migrate: reinstall MacPorts and all ports.
 
 Use this script after upgrading to a new version of OS X.
 See <https://trac.macports.org/wiki/Migration>
