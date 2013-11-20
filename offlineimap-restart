@@ -1,13 +1,25 @@
 #!/usr/bin/env bash
 
-(
+function notify {
+    command -v growlnotify && \
+        growlnotify --appIcon iTerm2 -m "Starting offlineimap."
+}
+
+function offlineimap_start {
+    rm -f ~/.offlineimap/*.lock
+    notify
+    offlineimap
+}
+
+function offlineimap_stop {
     if pgrep offlineimap; then
         pkill 'offlineimap$'
         # Give offlineimap time to shut down.
         sleep 10
     fi
+}
 
-    rm -f ~/.offlineimap/*.lock
-    command -v growlnotify && growlnotify -m "Starting offlineimap"
-    offlineimap
+(
+    offlineimap_stop
+    offlineimap_start
 ) &
