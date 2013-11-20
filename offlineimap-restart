@@ -2,13 +2,17 @@
 
 function notify {
     command -v growlnotify && \
-        growlnotify --appIcon iTerm2 -m "Starting offlineimap."
+        growlnotify --appIcon iTerm2 -m $1
 }
 
 function offlineimap_start {
     rm -f ~/.offlineimap/*.lock
-    notify
-    offlineimap
+    notify "Starting offlineimap"
+    if offlineimap; then
+        notify "offlineimap started successfully."
+    else
+        notify "offlineimap failed."
+    fi
 }
 
 function offlineimap_stop {
