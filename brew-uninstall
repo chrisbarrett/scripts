@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 cat <<EOF
-brew-uninstall: Uninstall Homebrew and all supporting files.
+brew-uninstall: uninstall Homebrew and all supporting files.
 EOF
 
 if which brew; then
