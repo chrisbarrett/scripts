@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
-function notify {
+function growl {
     command -v growlnotify && \
         growlnotify -n iTerm2 -a iTerm2 -m "$1"
 }
 
 function offlineimap_start {
     rm -f ~/.offlineimap/*.lock
-    notify "Starting offlineimap..."
+    growl "Starting offlineimap..."
     if offlineimap; then
-        notify "offlineimap is running."
+        growl "offlineimap is running."
     else
-        notify "offlineimap failed."
+        growl "offlineimap failed."
     fi
 }
 
