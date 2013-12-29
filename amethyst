@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-cat<<EOF
-amethyst: start the amethyst window manager.
-EOF
+# amethyst: start the amethyst window manager.
 
 amethyst-stop
 amethyst-start
