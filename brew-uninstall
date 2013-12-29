@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-cat <<EOF
-brew-uninstall: uninstall Homebrew and all supporting files.
-EOF
+# brew-uninstall: uninstall Homebrew and all supporting files.
 
 if which brew; then
     PREFIX=`brew --prefix`
