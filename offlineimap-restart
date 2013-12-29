@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-cat<<EOF
-offlineimap-restart: stop existing offlineimap processes and relaunch.
-EOF
+# offlineimap-restart: stop existing offlineimap processes and relaunch.
 
 function growl {
     command -v growlnotify && \
