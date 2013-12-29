@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# brew-install-cask: install the cask brew workflow.
+
+brew tap phinze/homebrew-cask
+brew install brew-cask
