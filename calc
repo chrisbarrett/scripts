@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-cat<<EOF
-calc: start an Emacs session with calc running.
-EOF
+# calc: start an Emacs session with calc running.
 
 emacs -nw -q -f full-calc
