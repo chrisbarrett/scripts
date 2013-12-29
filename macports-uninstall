@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
-cat <<EOF
-macports-uninstall: remove the MacPorts base system and all ports.
-EOF
+# macports-uninstall: remove the MacPorts base system and all ports.
 
 echo ---> Removing all ports...
 port -fp uninstall installed
