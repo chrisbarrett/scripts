@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+cat <<EOF
+brew-migrate: reinstall Homebrew and rebuild packages.
+
+WARNING: Homebrew and the entire cellar will be removed.
+EOF
+
+y_or_n "Continue?" || exit 1
+
+BREW_PKGS=~/brew-packages.txt
+if which brew; then
+    echo ---> Saving list of installed packages...
+    brew list > $BREW_PKGS
+fi
+
+echo ---> Reinstalling Homebrew...
+brew-uninstall
+brew-install
+brew-install-cask
+
+if [ -f $BREW_PKGS ]; then
+    echo ---> Restoring packages...
+    cat $BREW_PKGS | xargs brew install
+fi

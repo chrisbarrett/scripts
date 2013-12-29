@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+osascript -e "id of app \"$1"\"
+
+# Local Variables:
+# mode: sh
+# End:
