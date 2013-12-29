@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
-cat <<EOF
-macports-install: install the MacPorts base system.
-EOF
+# macports-install: install the MacPorts base system.
 
 echo ---> Installing MacPorts...
 
